@@ -1,0 +1,18 @@
+[project]
+name = "dtu-social-data-2026"
+version = "0.1.0"
+description = "A Python package for analyzing and visualizing social data, developed as part of the DTU Social Data course in 2026."
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "calplot>=0.1.7.5",
+    "ipykernel>=7.1.0",
+    "ipython>=9.10.0",
+    "matplotlib>=3.10.8",
+    "nbformat>=5.10.4",
+    "numpy>=2.4.2",
+    "pandas>=3.0.0",
+    "plotly>=6.5.2",
+    "scipy>=1.17.1",
+    "seaborn>=0.13.2",
+]

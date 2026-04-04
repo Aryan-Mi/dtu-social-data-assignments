@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Traveler Timmy Visits San Francisco</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     HERO
+     ═══════════════════════════════════════════════════════════════════════════ -->
+<header class="hero" id="hero">
+    <div class="hero__backdrop"></div>
+    <div class="hero__content">
+        <p class="hero__kicker">A Data Story</p>
+        <h1 class="hero__title">Time Traveler Timmy<br>Visits San Francisco</h1>
+        <p class="hero__subtitle">Using 22 years of crime data to find the safest week, district, and time of day to explore the city</p>
+        <div class="hero__scroll-hint">
+            <span>Scroll to begin</span>
+            <div class="hero__arrow"></div>
+        </div>
+    </div>
+</header>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     INTRO SECTION
+     ═══════════════════════════════════════════════════════════════════════════ -->
+<section class="narrative-section intro" id="intro">
+    <div class="narrative-section__inner">
+        <div class="prose">
+            <h2 class="section-label">The Setup</h2>
+            <p>
+                Timmy has a time machine. It can send him anywhere on Earth,
+                but there's a catch: it only reaches back 23 years, landing him
+                somewhere between 2003 and today. Naturally, Timmy wants to visit
+                San Francisco, but he's heard the city has a bit of a
+                <em>street safety problem</em>.
+            </p>
+            <p>
+                Being a careful time traveler, Timmy does his homework.
+                He finds a public dataset from the
+                <strong>San Francisco Police Department</strong> containing every
+                recorded police incident from January 2003 through early 2026,
+                totaling over <strong>1.7&nbsp;million reports</strong>.
+            </p>
+            <p>
+                The data merges two official sources: the
+                <em>Historical Incident Dataset</em> (2003&ndash;2017) and the
+                <em>Current Incident Dataset</em> (2018&ndash;present), unified into
+                consistent categories. Timmy focuses on four crime types most relevant
+                to someone walking around a city:
+            </p>
+            <ul class="crime-list">
+                <li><span class="crime-dot crime-dot--assault"></span> Assault</li>
+                <li><span class="crime-dot crime-dot--robbery"></span> Robbery</li>
+                <li><span class="crime-dot crime-dot--rape"></span> Rape</li>
+                <li><span class="crime-dot crime-dot--sexoffense"></span> Sex Offense</li>
+            </ul>
+            <p>
+                He excludes <strong>2018</strong> (the year the two datasets were
+                stitched together, creating a potential seam in the data) and
+                <strong>2020</strong> (when COVID lockdowns made crime patterns
+                anomalous). That leaves <strong>21&nbsp;years</strong> of clean data
+                and <strong>240,670</strong> street-safety incidents to work with.
+            </p>
+            <p>
+                Timmy has three questions, and he'll answer them one at a time.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     ACT 1 — WHEN (sticky scroll + static chart)
+     ═══════════════════════════════════════════════════════════════════════════ -->
+<section class="sticky-section" id="act1">
+    <div class="sticky-section__graphic">
+        <figure class="viz-container">
+            <img src="assets/viz1_alt_radial.svg"
+                 alt="Radial bar chart showing average weekly street crime incidents in San Francisco arranged like a clock face by calendar week, with week 52 highlighted as the safest"
+                 class="viz-img" />
+            <figcaption class="viz-caption">
+                <strong>Figure 1.</strong> Average weekly street-crime incidents in
+                San Francisco by calendar week (2003&ndash;2025, excluding 2018 &amp; 2020),
+                arranged radially with January at the top. Each bar represents one ISO
+                week; darker teal indicates more incidents. The variation across weeks is
+                modest (191&ndash;248 avg incidents), but Week&nbsp;52, Christmas week
+                (Dec&nbsp;23&ndash;29), consistently sits at the low end, averaging just
+                191&nbsp;incidents per year. The late-year dip holds across two decades
+                of data, suggesting a genuine seasonal pattern rather than noise.
+            </figcaption>
+        </figure>
+    </div>
+
+    <div class="sticky-section__steps">
+        <div class="step" data-step="1">
+            <h2 class="section-label">Act I</h2>
+            <h3>When should Timmy visit?</h3>
+            <p>
+                Timmy's first question: <em>which week of the year is the safest?</em>
+                To find out, he counts all street-safety incidents by calendar week and
+                averages across 21 years.
+            </p>
+        </div>
+        <div class="step" data-step="2">
+            <p>
+                The chart reveals a clear seasonal rhythm. Street crime peaks in
+                <strong>late summer and early autumn</strong> (weeks&nbsp;35&ndash;44,
+                roughly August through October), when warmer weather and longer daylight
+                bring more people (and more incidents) onto the streets.
+            </p>
+        </div>
+        <div class="step" data-step="3">
+            <p>
+                The safest stretch is the <strong>winter holiday season</strong>.
+                Week&nbsp;52, Christmas week, averages just
+                <strong>191&nbsp;incidents</strong>, a full 23% below the autumn peak.
+                The surrounding weeks (50, 51, 1) are nearly as safe.
+            </p>
+            <p>
+                Timmy has his answer: <strong>he's going to Christmas-week
+                San&nbsp;Francisco</strong>.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     ACT 2 — WHERE (sticky scroll + map)
+     ═══════════════════════════════════════════════════════════════════════════ -->
+<section class="sticky-section" id="act2">
+    <div class="sticky-section__graphic">
+        <figure class="viz-container">
+            <iframe src="assets/viz2_district_map.html"
+                    title="Choropleth map of San Francisco police districts colored by street crime level during Christmas week"
+                    class="viz-iframe"></iframe>
+            <figcaption class="viz-caption">
+                <strong>Figure 2.</strong> Average street-crime incidents per year
+                during Christmas week (week&nbsp;52), by San Francisco police district.
+                Green districts are safest; red are most dangerous. The
+                <strong>Richmond</strong> district, covering the northwestern corner
+                of the city (including Golden Gate Park's north side, the Inner and
+                Outer Richmond neighborhoods), averages just 7.2&nbsp;incidents per
+                year during this week, less than a quarter of the
+                Southern&nbsp;district's 30.1. Hover over districts to see exact values.
+            </figcaption>
+        </figure>
+    </div>
+
+    <div class="sticky-section__steps">
+        <div class="step" data-step="1">
+            <h2 class="section-label">Act II</h2>
+            <h3>Where should Timmy stay?</h3>
+            <p>
+                Timmy has picked his week. Now he needs to book a hotel. San Francisco
+                is divided into <strong>10&nbsp;police districts</strong>, each with a
+                very different safety profile. Which one should he choose?
+            </p>
+        </div>
+        <div class="step" data-step="2">
+            <p>
+                The map tells a striking story. The <strong>Southern</strong> and
+                <strong>Mission</strong> districts, which cover the downtown
+                core, SoMa, and the Mission, see 4&times; more street crime
+                during Christmas week than the city's quieter edges.
+            </p>
+        </div>
+        <div class="step" data-step="3">
+            <p>
+                The winner is clear: the <strong>Richmond district</strong>, tucked in
+                the city's foggy northwest corner. It averages just
+                <strong>7.2&nbsp;incidents per year</strong> during Christmas
+                week, the lowest of any district.
+            </p>
+            <p>
+                Timmy books his hotel on Clement Street and starts
+                planning his daily itinerary.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     ACT 3 — WHAT TIME (sticky scroll + interactive Plotly)
+     ═══════════════════════════════════════════════════════════════════════════ -->
+<section class="sticky-section" id="act3">
+    <div class="sticky-section__graphic">
+        <figure class="viz-container">
+            <iframe src="assets/viz3_hourly_interactive.html"
+                    title="Interactive stacked bar chart showing hourly street crime pattern in Richmond district during Christmas week"
+                    class="viz-iframe"></iframe>
+            <figcaption class="viz-caption">
+                <strong>Figure 3.</strong> Hourly distribution of street crime in the
+                Richmond district during Christmas week, averaged over 21&nbsp;years.
+                Bars are stacked by crime type. With only ~7 incidents per year in this
+                district during this week, the hour-level pattern is inherently noisy.
+                The clearest signal: incidents drop to near zero between 3&ndash;7 AM
+                and cluster most heavily around midnight and late evening (10 PM&ndash;2 AM).
+                The daytime hours show scattered spikes (notably at noon) but no consistent
+                pattern. Click legend items to isolate specific crime types.
+            </figcaption>
+        </figure>
+    </div>
+
+    <div class="sticky-section__steps">
+        <div class="step" data-step="1">
+            <h2 class="section-label">Act III</h2>
+            <h3>What time should Timmy explore?</h3>
+            <p>
+                Timmy's in the Richmond during Christmas week. But even the safest
+                district isn't equally safe at every hour. When should he be out and
+                about?
+            </p>
+        </div>
+        <div class="step" data-step="2">
+            <p>
+                A caveat up front: with only about <strong>7 incidents per
+                year</strong> in this district during this week, the hourly
+                breakdown is noisy. Individual spikes (like at noon) may be
+                statistical artifacts rather than real patterns.
+                <strong>Assault</strong> dominates at every hour.
+            </p>
+        </div>
+        <div class="step" data-step="3">
+            <p>
+                That said, two things do stand out. Incidents drop to
+                <strong>near zero between 3&ndash;7 AM</strong>, and they
+                cluster most heavily in the <strong>late evening and around
+                midnight</strong> (10 PM&ndash;2 AM), when
+                <strong>robbery</strong> in particular picks up.
+            </p>
+            <p>
+                Timmy's takeaway: the Richmond during Christmas week is
+                already very safe by any measure. But if he wants to be
+                extra cautious, he should avoid walking alone late at night.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     CONCLUSION
+     ═══════════════════════════════════════════════════════════════════════════ -->
+<section class="narrative-section conclusion" id="conclusion">
+    <div class="narrative-section__inner">
+        <div class="prose">
+            <h2 class="section-label">The Verdict</h2>
+            <h3>Timmy's Travel Plan</h3>
+
+            <div class="verdict-card">
+                <div class="verdict-card__item">
+                    <span class="verdict-card__icon">&#128197;</span>
+                    <div>
+                        <strong>When:</strong> Christmas Week (Dec 23&ndash;29)
+                        <br><span class="verdict-card__detail">23% fewer incidents than the autumn peak</span>
+                    </div>
+                </div>
+                <div class="verdict-card__item">
+                    <span class="verdict-card__icon">&#128205;</span>
+                    <div>
+                        <strong>Where:</strong> The Richmond District
+                        <br><span class="verdict-card__detail">7.2 avg incidents/year vs. 30.1 in Southern</span>
+                    </div>
+                </div>
+                <div class="verdict-card__item">
+                    <span class="verdict-card__icon">&#9200;</span>
+                    <div>
+                        <strong>When to explore:</strong> Anytime, but avoid late night
+                        <br><span class="verdict-card__detail">~7 incidents/year total; late evening (10 PM&ndash;2 AM) shows the most activity</span>
+                    </div>
+                </div>
+            </div>
+
+            <p>
+                Of course, this analysis comes with caveats. Crime <em>reports</em>
+                don't equal crime. They reflect where and when police are
+                active, not necessarily where incidents actually occur. The Richmond's
+                low numbers partly reflect lower police presence and reporting rates,
+                not just genuine safety. And aggregating 21&nbsp;years smooths over
+                real changes in neighborhoods and policing strategies.
+            </p>
+            <p>
+                Still, for a time traveler with limited options,
+                the data paints a clear picture: if you must visit San Francisco and
+                safety is your priority, Christmas week in the Richmond is your best bet.
+            </p>
+
+            <hr class="section-divider" />
+
+            <h3>References</h3>
+            <ol class="references">
+                <li>San Francisco Police Department. <em>Police Department Incident Reports: Historical 2003 to May 2018</em>. DataSF Open Data Portal.</li>
+                <li>San Francisco Police Department. <em>Police Department Incident Reports: 2018 to Present</em>. DataSF Open Data Portal.</li>
+                <li>Richardson, R., Schultz, J. M., &amp; Crawford, K. (2019). Dirty Data, Bad Predictions: How Civil Rights Violations Impact Police Data. <em>New York University Law Review Online</em>, 94, 15&ndash;55.</li>
+            </ol>
+
+            <p class="colophon">
+                Built for the Social Data Analysis course at DTU, Spring 2026.
+                Data spans January&nbsp;2003 through December&nbsp;2025.
+                Analysis excludes 2018 (dataset merge) and 2020 (COVID anomaly).
+            </p>
+        </div>
+    </div>
+</section>
+
+<script src="scroll.js"></script>
+</body>
+</html>

@@ -6,10 +6,12 @@
     <title>Time Traveler Timmy Visits San Francisco</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400;1,700&family=Lora:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+<div class="progress-bar" id="progressBar"></div>
 
 <!-- ═══════════════════════════════════════════════════════════════════════════
      HERO
@@ -18,7 +20,7 @@
     <div class="hero__backdrop"></div>
     <div class="hero__content">
         <p class="hero__kicker">A Data Story</p>
-        <h1 class="hero__title">Time Traveler Timmy<br>Visits San Francisco</h1>
+        <h1 class="hero__title">Time Traveler Timmy<br><em>Visits San Francisco</em></h1>
         <p class="hero__subtitle">Using 22 years of crime data to find the safest week, district, and time of day to explore the city</p>
         <div class="hero__scroll-hint">
             <span>Scroll to begin</span>
@@ -58,15 +60,16 @@
             <ul class="crime-list">
                 <li><span class="crime-dot crime-dot--assault"></span> Assault</li>
                 <li><span class="crime-dot crime-dot--robbery"></span> Robbery</li>
-                <li><span class="crime-dot crime-dot--rape"></span> Rape</li>
-                <li><span class="crime-dot crime-dot--sexoffense"></span> Sex Offense</li>
+                <li><span class="crime-dot crime-dot--rape"></span> Sexual Violence (Rape / Sex Offense)</li>
+                <li><span class="crime-dot crime-dot--sexoffense"></span> Arson</li>
             </ul>
             <p>
-                He excludes <strong>2018</strong> (the year the two datasets were
-                stitched together, creating a potential seam in the data) and
-                <strong>2020</strong> (when COVID lockdowns made crime patterns
-                anomalous). That leaves <strong>21&nbsp;years</strong> of clean data
-                and <strong>240,670</strong> street-safety incidents to work with.
+                One data quirk worth noting: the historical dataset labels sexual
+                violence as <em>Rape</em>, the current one as <em>Sex Offense</em> —
+                same crime, different name. Timmy merges them into one category.
+                He also excludes <strong>2018</strong> (the dataset merge year) and
+                <strong>2020</strong> (COVID anomaly). That leaves <strong>21&nbsp;years</strong>
+                of clean data and <strong>240,670</strong> street-safety incidents.
             </p>
             <p>
                 Timmy has three questions, and he'll answer them one at a time.
@@ -85,14 +88,16 @@
                  alt="Radial bar chart showing average weekly street crime incidents in San Francisco arranged like a clock face by calendar week, with week 52 highlighted as the safest"
                  class="viz-img" />
             <figcaption class="viz-caption">
-                <strong>Figure 1.</strong> Average weekly street-crime incidents in
-                San Francisco by calendar week (2003&ndash;2025, excluding 2018 &amp; 2020),
-                arranged radially with January at the top. Each bar represents one ISO
-                week; darker teal indicates more incidents. The variation across weeks is
-                modest (191&ndash;248 avg incidents), but Week&nbsp;52, Christmas week
-                (Dec&nbsp;23&ndash;29), consistently sits at the low end, averaging just
-                191&nbsp;incidents per year. The late-year dip holds across two decades
-                of data, suggesting a genuine seasonal pattern rather than noise.
+                <strong>Figure 1.</strong> Weekly risk index for San Francisco
+                (2003&ndash;2025, excluding 2018 &amp; 2020), arranged radially with
+                January at the top. Each bar is one ISO week. The index weights each
+                incident by its severity: Assault&nbsp;&times;1.0,
+                Robbery&nbsp;&times;1.5, Sexual&nbsp;Violence&nbsp;&times;3.0,
+                Arson&nbsp;&times;0.8 &mdash; then sums without artificial rescaling,
+                so bar heights reflect real differences. Darker teal means higher risk.
+                Week&nbsp;52, Christmas week (Dec&nbsp;23&ndash;29), scores the lowest
+                of any week in the year. The surrounding weeks (50, 51, 1) are nearly
+                as quiet, pointing to a genuine late-December lull rather than a fluke.
             </figcaption>
         </figure>
     </div>
@@ -103,27 +108,30 @@
             <h3>When should Timmy visit?</h3>
             <p>
                 Timmy's first question: <em>which week of the year is the safest?</em>
-                To find out, he counts all street-safety incidents by calendar week and
-                averages across 21 years.
+                He pulls together four crime types &mdash; Assault, Robbery, Sexual
+                Violence, and Arson &mdash; and weights each by how serious it is
+                before adding them up. No smoke and mirrors, just a single honest
+                number for every week.
             </p>
         </div>
         <div class="step" data-step="2">
             <p>
-                The chart reveals a clear seasonal rhythm. Street crime peaks in
-                <strong>late summer and early autumn</strong> (weeks&nbsp;35&ndash;44,
-                roughly August through October), when warmer weather and longer daylight
-                bring more people (and more incidents) onto the streets.
+                The chart has a clear shape. Risk climbs through spring, peaks in
+                <strong>late summer and early autumn</strong>
+                (weeks&nbsp;35&ndash;44, roughly August through October), then
+                falls steadily as the year winds down. Warmer weather pulls more
+                people onto the streets &mdash; and, apparently, more trouble too.
             </p>
         </div>
         <div class="step" data-step="3">
             <p>
-                The safest stretch is the <strong>winter holiday season</strong>.
-                Week&nbsp;52, Christmas week, averages just
-                <strong>191&nbsp;incidents</strong>, a full 23% below the autumn peak.
-                The surrounding weeks (50, 51, 1) are nearly as safe.
+                The low point is unmistakable: <strong>Week&nbsp;52, Christmas
+                week</strong>. Its risk index is the lowest of all 52 weeks,
+                about <strong>24% below the autumn peak</strong>. Weeks 50,
+                51, and 1 (New Year's) are nearly as calm.
             </p>
             <p>
-                Timmy has his answer: <strong>he's going to Christmas-week
+                Timmy has his answer: <strong>he's aiming for Christmas-week
                 San&nbsp;Francisco</strong>.
             </p>
         </div>
@@ -140,14 +148,17 @@
                     title="Choropleth map of San Francisco police districts colored by street crime level during Christmas week"
                     class="viz-iframe"></iframe>
             <figcaption class="viz-caption">
-                <strong>Figure 2.</strong> Average street-crime incidents per year
-                during Christmas week (week&nbsp;52), by San Francisco police district.
-                Green districts are safest; red are most dangerous. The
-                <strong>Richmond</strong> district, covering the northwestern corner
-                of the city (including Golden Gate Park's north side, the Inner and
-                Outer Richmond neighborhoods), averages just 7.2&nbsp;incidents per
-                year during this week, less than a quarter of the
-                Southern&nbsp;district's 30.1. Hover over districts to see exact values.
+                <strong>Figure 2.</strong> Danger score by San Francisco police
+                district during Christmas week (week&nbsp;52), averaged over
+                21&nbsp;years. The score applies the same severity weights as
+                Act&nbsp;I &mdash; Assault&nbsp;&times;1.0, Robbery&nbsp;&times;1.5,
+                Sexual&nbsp;Violence&nbsp;&times;3.0, Arson&nbsp;&times;0.8 &mdash;
+                sums them into a composite, then rescales to 0&ndash;100 across
+                districts (0&nbsp;=&nbsp;safest, 100&nbsp;=&nbsp;most dangerous).
+                Here the 0&ndash;100 scale is honest: the spread between the
+                quietest and busiest district is nearly 4&times;, so the colour
+                difference you see is real. Hover over any district to see its
+                exact score.
             </figcaption>
         </figure>
     </div>
@@ -164,18 +175,21 @@
         </div>
         <div class="step" data-step="2">
             <p>
-                The map tells a striking story. The <strong>Southern</strong> and
-                <strong>Mission</strong> districts, which cover the downtown
-                core, SoMa, and the Mission, see 4&times; more street crime
-                during Christmas week than the city's quieter edges.
+                The colour contrast is hard to miss. <strong>Southern</strong> and
+                <strong>Mission</strong> &mdash; downtown, SoMa, the Mission
+                corridor &mdash; sit deep in the red, scoring in the 90s.
+                There's a sharp drop once you cross into the city's western
+                neighbourhoods: Taraval scores just 11, and the top two sit
+                well clear of everything else.
             </p>
         </div>
         <div class="step" data-step="3">
             <p>
-                The winner is clear: the <strong>Richmond district</strong>, tucked in
-                the city's foggy northwest corner. It averages just
-                <strong>7.2&nbsp;incidents per year</strong> during Christmas
-                week, the lowest of any district.
+                The winner is the <strong>Richmond district</strong>, foggy
+                northwest corner of the city, right along the edge of Golden
+                Gate Park. Danger score: <strong>0 out of 100</strong> &mdash;
+                the calmest district in SF during Christmas week by every
+                measure in the data.
             </p>
             <p>
                 Timmy books his hotel on Clement Street and starts
@@ -254,24 +268,24 @@
 
             <div class="verdict-card">
                 <div class="verdict-card__item">
-                    <span class="verdict-card__icon">&#128197;</span>
+                    <span class="verdict-card__num">01</span>
                     <div>
                         <strong>When:</strong> Christmas Week (Dec 23&ndash;29)
-                        <br><span class="verdict-card__detail">23% fewer incidents than the autumn peak</span>
+                        <span class="verdict-card__detail">Lowest risk index of the year &mdash; 24% below the autumn peak</span>
                     </div>
                 </div>
                 <div class="verdict-card__item">
-                    <span class="verdict-card__icon">&#128205;</span>
+                    <span class="verdict-card__num">02</span>
                     <div>
                         <strong>Where:</strong> The Richmond District
-                        <br><span class="verdict-card__detail">7.2 avg incidents/year vs. 30.1 in Southern</span>
+                        <span class="verdict-card__detail">Danger score 0/100 &mdash; the calmest district in the city</span>
                     </div>
                 </div>
                 <div class="verdict-card__item">
-                    <span class="verdict-card__icon">&#9200;</span>
+                    <span class="verdict-card__num">03</span>
                     <div>
                         <strong>When to explore:</strong> Anytime, but avoid late night
-                        <br><span class="verdict-card__detail">~7 incidents/year total; late evening (10 PM&ndash;2 AM) shows the most activity</span>
+                        <span class="verdict-card__detail">~7 incidents/year total; late evening (10 PM&ndash;2 AM) shows the most activity</span>
                     </div>
                 </div>
             </div>

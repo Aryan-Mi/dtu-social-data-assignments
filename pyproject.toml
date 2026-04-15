@@ -6,6 +6,7 @@ readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "calplot>=0.1.7.5",
+    "certifi>=2026.2.25",
     "ipykernel>=7.1.0",
     "ipython>=9.10.0",
     "matplotlib>=3.10.8",
@@ -15,4 +16,5 @@ dependencies = [
     "plotly>=6.5.2",
     "scipy>=1.17.1",
     "seaborn>=0.13.2",
+    "urllib3>=2.6.3",
 ]

@@ -7,6 +7,7 @@ requires-python = ">=3.13"
 dependencies = [
     "calplot>=0.1.7.5",
     "certifi>=2026.2.25",
+    "folium>=0.20.0",
     "ipykernel>=7.1.0",
     "ipython>=9.10.0",
     "matplotlib>=3.10.8",

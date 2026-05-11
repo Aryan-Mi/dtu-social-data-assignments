@@ -383,6 +383,96 @@
     width: 24px; height: 3px; border-radius: 2px;
   }
 
+  /* INTERSECTIONALITY */
+  .intersect-section {
+    padding: 120px 10vw;
+    background: var(--white);
+  }
+  .ix-pain-nav { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 0; }
+  .ix-pain-btn {
+    font-size: 12px; padding: 6px 14px; border-radius: 20px; cursor: pointer;
+    border: 0.5px solid var(--border);
+    background: var(--white); color: var(--ink-light);
+    transition: all 0.15s; user-select: none; font-family: 'DM Sans', sans-serif;
+  }
+  .ix-pain-btn.active { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .ix-pain-btn:hover:not(.active) { background: var(--sand); }
+
+  .ix-controls-row {
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 16px; margin-bottom: 28px;
+  }
+  .ix-toggle-wrap {
+    display: flex; border: 0.5px solid var(--border); border-radius: 20px; overflow: hidden; flex-shrink: 0;
+  }
+  .ix-toggle-btn {
+    font-size: 12px; padding: 6px 16px; cursor: pointer;
+    background: var(--white); color: var(--ink-light);
+    border: none; transition: all 0.15s; user-select: none;
+    white-space: nowrap; font-family: 'DM Sans', sans-serif;
+  }
+  .ix-toggle-btn.active { background: var(--ink); color: #fff; }
+  .ix-toggle-btn:hover:not(.active) { background: var(--sand); }
+
+  .ix-view-label {
+    font-size: 12px; color: var(--ink-light); margin-bottom: 16px;
+    font-style: italic; font-weight: 300;
+  }
+
+  .ix-grid-wrap { overflow-x: auto; }
+  .ix-grid {
+    display: grid; grid-template-columns: 72px repeat(4, 1fr);
+    gap: 4px; min-width: 400px;
+  }
+  .ix-col-head {
+    font-size: 11px; color: var(--ink-light); font-weight: 500;
+    text-align: center; padding: 4px 2px 10px; letter-spacing: 0.04em;
+  }
+  .ix-row-head {
+    font-size: 13px; color: var(--ink-mid); font-weight: 500;
+    display: flex; align-items: center; padding-right: 10px;
+    justify-content: flex-end;
+  }
+  .ix-cell {
+    aspect-ratio: 1.4; border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 16px; font-weight: 700;
+    cursor: default; position: relative;
+    transition: transform 0.12s, box-shadow 0.12s;
+  }
+  .ix-cell:hover { transform: scale(1.07); box-shadow: 0 4px 16px rgba(0,0,0,0.12); z-index: 2; }
+  .ix-cell:hover .ix-tip { display: block; }
+  .ix-tip {
+    display: none; position: absolute; bottom: calc(100% + 6px); left: 50%;
+    transform: translateX(-50%);
+    background: var(--ink); color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px; font-weight: 400;
+    padding: 5px 10px; border-radius: 6px;
+    white-space: nowrap; pointer-events: none; z-index: 10;
+  }
+  .ix-row-divider { grid-column: 1 / -1; height: 4px; }
+
+  .ix-legends { display: flex; gap: 28px; margin-top: 16px; flex-wrap: wrap; }
+  .ix-legend { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--ink-light); }
+  .ix-legend-bar { width: 130px; height: 8px; border-radius: 4px; }
+  .ix-legend-gap-bar { background: linear-gradient(to right, #1A4A70, #7AAED0, #F0EDE8, #D06050, #8B1A1A); }
+  .ix-legend-raw-bar { background: linear-gradient(to right, #B5D4F4, #378ADD, #042C53); }
+
+  .ix-callout {
+    margin-top: 24px; padding: 16px 20px;
+    border-left: 4px solid var(--coral);
+    background: var(--sand);
+    font-size: 14px; color: var(--ink-mid); line-height: 1.65;
+    font-weight: 300;
+  }
+  .ix-callout strong { font-weight: 500; color: var(--ink); }
+  .ix-source-note {
+    margin-top: 12px; font-size: 12px; color: var(--ink-light);
+    font-weight: 300; font-style: italic;
+  }
+
   /* TAKEAWAY */
   .takeaway-section {
     padding: 120px 10vw;
@@ -601,6 +691,7 @@
     <a href="#where">Where</a>
     <a href="#map">Map</a>
     <a href="#time">Over time</a>
+    <a href="#intersect">Who's most affected</a>
   </div>
 </nav>
 
@@ -880,6 +971,51 @@
   </div>
 </section>
 
+<!-- INTERSECTIONALITY -->
+<section class="intersect-section" id="intersect">
+  <div class="section-label fade-in">Part 4 · Who is most affected</div>
+  <h2 class="section-title fade-in">The gap isn't just about gender.<br><em style="font-style:italic;color:var(--coral)">Race compounds it.</em></h2>
+  <p class="section-body fade-in">Each cell shows how far above or below the overall band median a group waits. Select a pain level. Toggle to see the same data as raw wait times in minutes.</p>
+
+  <div class="fade-in" style="margin-top:48px">
+    <div class="ix-controls-row">
+      <div class="ix-pain-nav" id="ixPainNav">
+        <div class="ix-pain-btn active" data-pain="0">No pain (0)</div>
+        <div class="ix-pain-btn" data-pain="1">Mild (1–3)</div>
+        <div class="ix-pain-btn" data-pain="2">Moderate (4–6)</div>
+        <div class="ix-pain-btn" data-pain="3">Severe (7–9)</div>
+        <div class="ix-pain-btn" data-pain="4">Worst (10)</div>
+      </div>
+      <div class="ix-toggle-wrap">
+        <div class="ix-toggle-btn active" id="ixBtnGap">Gap from median</div>
+        <div class="ix-toggle-btn" id="ixBtnRaw">Raw wait time</div>
+      </div>
+    </div>
+
+    <div class="ix-view-label" id="ixViewLabel">Minutes above or below the overall band median — positive = longer wait</div>
+
+    <div class="ix-grid-wrap">
+      <div class="ix-grid" id="ixGrid"></div>
+    </div>
+
+    <div class="ix-legends">
+      <div class="ix-legend" id="ixLegendGap">
+        <span>Shorter wait</span>
+        <div class="ix-legend-bar ix-legend-gap-bar"></div>
+        <span>Longer wait</span>
+      </div>
+      <div class="ix-legend" id="ixLegendRaw" style="display:none">
+        <span>12 min</span>
+        <div class="ix-legend-bar ix-legend-raw-bar"></div>
+        <span>21 min</span>
+      </div>
+    </div>
+
+    <div class="ix-callout" id="ixCallout"></div>
+    <div class="ix-source-note">Minutes from overall band median. Positive = longer than median, negative = shorter. Source: NHAMCS 2014–2022.</div>
+  </div>
+</section>
+
 <!-- TAKEAWAY -->
 <section class="takeaway-section">
   <div class="section-label">What we learned</div>
@@ -898,8 +1034,10 @@
       <p>The Midwest gap of +2 min is twice the national average. Local protocols and hospital structures matter.</p>
     </div>
     <div class="takeaway-card">
-      <div class="icon">📈</div>
-      <h4>It's improving — but not gone</h4>
+      <div class="icon">👥</div>
+      <h4>Race compounds the gap</h4>
+      <p>NH Black women wait up to +5 min above the band median at mild pain — the single largest disparity in the dataset, compounding gender and race.</p>
+    </div>
       <p>The trend is encouraging. But improvement has stalled since 2019, and the gap remains present at every triage level.</p>
     </div>
     <div class="takeaway-card">
@@ -1358,6 +1496,115 @@ const mapObs = new IntersectionObserver(entries => {
 }, {threshold: 0.1});
 const mapEl = document.getElementById('usMapChart');
 if (mapEl) mapObs.observe(mapEl);
+
+/* -------- INTERSECTIONALITY HEATMAP -------- */
+const IX_RACES = ['NH White','NH Black','Hispanic','NH Other'];
+const IX_BAND_MEDIANS = [15, 16, 16, 17, 16];
+const IX_GAP = [
+  { f:[-1,+3,+3, 0], m:[-2,+2,+1,-3] },
+  { f:[+1,+5,+2,-3], m:[-1,+1,+1,-3] },
+  { f:[ 0,+1,+2,-1], m:[-1,+2, 0,-2] },
+  { f:[ 0,+1, 0,-2], m:[-1,+2, 0,-3] },
+  { f:[ 0,+1,+2,+1], m:[-1,+2,+1,-1] },
+];
+const IX_CALLOUTS_GAP = [
+  "At <strong>no pain</strong>, NH Black women wait <strong>+3 min above median</strong> while NH White men wait 2 min below — a 5-minute gap between groups with identical (zero) pain.",
+  "At <strong>mild pain</strong>, NH Black women show the largest single value in the dataset: <strong>+5 min above median</strong>. NH Other patients of both sexes wait shorter than median.",
+  "At <strong>moderate pain</strong>, NH Black men wait +2 above median — here race shapes the gap as much as gender does.",
+  "At <strong>severe pain</strong>, NH Other patients consistently wait below median regardless of sex, while NH Black patients of both sexes wait above.",
+  "At <strong>worst pain (10)</strong>, NH Black men wait <strong>+2 above median</strong> while NH White men wait 1 below — a 3-minute split at peak pain intensity.",
+];
+const IX_CALLOUTS_RAW = [
+  "At <strong>no pain</strong>, NH Black women wait a median of <strong>18 min</strong> vs. 13 min for NH White men — the same 5-minute gap, now in absolute terms.",
+  "At <strong>mild pain</strong>, NH Black women wait <strong>21 min</strong> — the highest absolute wait of any group at this pain level. NH Other men wait just 13 min.",
+  "At <strong>moderate pain</strong>, NH Black men wait 18 min and NH Black women 17 min, compared to 16 min for NH White women.",
+  "At <strong>severe pain</strong>, NH Black women wait 18 min vs. 16 min for NH White men — a 2-minute gap that persists at peak severity.",
+  "At <strong>worst pain</strong>, NH Black men at <strong>18 min</strong> wait longest in absolute terms. NH Other women at 17 min are close behind.",
+];
+
+let ixPain = 0;
+let ixView = 'gap';
+
+function ixGapColor(v) {
+  if (v <= -3) return { bg:'#1A4A70', text:'#D6E4F0' };
+  if (v === -2) return { bg:'#2A6090', text:'#D6E4F0' };
+  if (v === -1) return { bg:'#7AAED0', text:'#0C3A5C' };
+  if (v === 0)  return { bg:'#F0EDE8', text:'#666' };
+  if (v === 1)  return { bg:'#E8B5A8', text:'#6A1A0A' };
+  if (v === 2)  return { bg:'#D06050', text:'#fff' };
+  return { bg:'#8B1A1A', text:'#fff' };
+}
+function ixRawColor(v, mn, mx) {
+  const t = (v - mn) / (mx - mn);
+  if (t < 0.25) return { bg:'#B5D4F4', text:'#0C447C' };
+  if (t < 0.5)  return { bg:'#378ADD', text:'#fff' };
+  if (t < 0.75) return { bg:'#185FA5', text:'#fff' };
+  return { bg:'#042C53', text:'#B5D4F4' };
+}
+
+function renderIx() {
+  const d = IX_GAP[ixPain];
+  const median = IX_BAND_MEDIANS[ixPain];
+  const grid = document.getElementById('ixGrid');
+  if (!grid) return;
+  grid.innerHTML = '';
+
+  const rawF = d.f.map(v => median + v);
+  const rawM = d.m.map(v => median + v);
+  const allRaw = [...rawF, ...rawM];
+  const rMin = Math.min(...allRaw), rMax = Math.max(...allRaw);
+
+  grid.innerHTML += '<div class="ix-col-head"></div>';
+  IX_RACES.forEach(r => { grid.innerHTML += `<div class="ix-col-head">${r}</div>`; });
+
+  [['Female', d.f, rawF], ['Male', d.m, rawM]].forEach(([sex, gapVals, rawVals], si) => {
+    if (si === 1) grid.innerHTML += `<div class="ix-row-divider" style="background:rgba(0,0,0,0.06)"></div>`;
+    grid.innerHTML += `<div class="ix-row-head">${sex}</div>`;
+    gapVals.forEach((gv, ri) => {
+      const rv = rawVals[ri];
+      let bg, text, display, tipText;
+      if (ixView === 'gap') {
+        ({ bg, text } = ixGapColor(gv));
+        display = (gv > 0 ? '+' : '') + gv;
+        tipText = `${sex} · ${IX_RACES[ri]}: ${display} min from median`;
+      } else {
+        ({ bg, text } = ixRawColor(rv, rMin, rMax));
+        display = rv + ' min';
+        tipText = `${sex} · ${IX_RACES[ri]}: ${rv} min median wait`;
+      }
+      grid.innerHTML += `<div class="ix-cell" style="background:${bg};color:${text}">${display}<div class="ix-tip">${tipText}</div></div>`;
+    });
+  });
+
+  document.getElementById('ixCallout').innerHTML =
+    ixView === 'gap' ? IX_CALLOUTS_GAP[ixPain] : IX_CALLOUTS_RAW[ixPain];
+  document.getElementById('ixViewLabel').textContent =
+    ixView === 'gap'
+      ? 'Minutes above or below the overall band median — positive = longer wait'
+      : 'Estimated median wait time to provider (minutes)';
+  document.getElementById('ixLegendGap').style.display = ixView === 'gap' ? 'flex' : 'none';
+  document.getElementById('ixLegendRaw').style.display = ixView === 'raw'  ? 'flex' : 'none';
+}
+
+document.querySelectorAll('.ix-pain-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.ix-pain-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    ixPain = parseInt(btn.dataset.pain);
+    renderIx();
+  });
+});
+const ixBtnGap = document.getElementById('ixBtnGap');
+const ixBtnRaw = document.getElementById('ixBtnRaw');
+if (ixBtnGap) {
+  ixBtnGap.addEventListener('click', () => {
+    ixView = 'gap'; ixBtnGap.classList.add('active'); ixBtnRaw.classList.remove('active'); renderIx();
+  });
+  ixBtnRaw.addEventListener('click', () => {
+    ixView = 'raw'; ixBtnRaw.classList.add('active'); ixBtnGap.classList.remove('active'); renderIx();
+  });
+}
+renderIx();
 
 /* -------- SCROLL ANIMATIONS -------- */
 const obs = new IntersectionObserver(entries => {

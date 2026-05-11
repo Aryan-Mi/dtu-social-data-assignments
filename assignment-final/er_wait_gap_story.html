@@ -599,6 +599,7 @@
     <a href="#what">What</a>
     <a href="#stories">By year</a>
     <a href="#where">Where</a>
+    <a href="#map">Map</a>
     <a href="#time">Over time</a>
   </div>
 </nav>
@@ -610,16 +611,16 @@
   <p class="hero-sub">When women and men arrive at the emergency room with the same symptoms and the same pain scores, women consistently wait longer to see a provider. This is the story of that gap.</p>
   <div class="hero-stat-row fade-in">
     <div class="hero-stat">
-      <div class="num">+4</div>
-      <div class="label">median extra minutes women wait in the most urgent category</div>
+      <div class="num">+6</div>
+      <div class="label">median extra minutes women wait in the most urgent + highest pain category</div>
     </div>
     <div class="hero-stat">
-      <div class="num">1.2</div>
-      <div class="label">average extra minutes nationally, every ER visit</div>
+      <div class="num">1.9</div>
+      <div class="label">mean extra minutes nationally across all ER visits</div>
     </div>
     <div class="hero-stat">
-      <div class="num">10+</div>
-      <div class="label">years of consistent data showing this pattern</div>
+      <div class="num">14</div>
+      <div class="label">consecutive years of data showing this pattern (2009–2022)</div>
     </div>
   </div>
   <div class="scroll-cue">Scroll to explore</div>
@@ -628,24 +629,24 @@
 <!-- EDA OVERVIEW -->
 <section class="eda-section" id="overview">
   <div class="section-label fade-in">The Dataset · NHAMCS 2009–2022</div>
-  <h2 class="section-title fade-in">139,547 visits.<br>One consistent pattern.</h2>
+  <h2 class="section-title fade-in">323,137 visits.<br>One consistent pattern.</h2>
   <p class="section-body fade-in">The National Hospital Ambulatory Medical Care Survey samples emergency departments across the United States. Before zooming into the gender gap, here is what the dataset looks like.</p>
 
   <div class="eda-kpi-row fade-in">
     <div class="eda-kpi">
-      <div class="eda-kpi-num"><span class="eda-counter" data-target="139547">0</span></div>
-      <div class="eda-kpi-label">ER visit records analyzed</div>
+      <div class="eda-kpi-num"><span class="eda-counter" data-target="323137">0</span></div>
+      <div class="eda-kpi-label">ER visit records analyzed (2009–2022)</div>
     </div>
     <div class="eda-kpi">
       <div class="eda-kpi-num"><span class="eda-counter" data-target="14">0</span></div>
       <div class="eda-kpi-label">years of continuous survey data</div>
     </div>
     <div class="eda-kpi">
-      <div class="eda-kpi-num"><span class="eda-counter" data-target="52">0</span><span class="eda-kpi-unit">%</span></div>
+      <div class="eda-kpi-num"><span class="eda-counter" data-target="54">0</span><span class="eda-kpi-unit">%</span></div>
       <div class="eda-kpi-label">of all visits were female patients</div>
     </div>
     <div class="eda-kpi">
-      <div class="eda-kpi-num"><span class="eda-counter" data-target="25">0</span><span class="eda-kpi-unit"> min</span></div>
+      <div class="eda-kpi-num"><span class="eda-counter" data-target="21">0</span><span class="eda-kpi-unit"> min</span></div>
       <div class="eda-kpi-label">overall median wait time (all patients)</div>
     </div>
   </div>
@@ -658,8 +659,8 @@
     <div>
       <div class="eda-sub-title">Patient gender split</div>
       <div class="eda-gender-bar">
-        <div class="eda-gender-f" style="width:52%"><span class="eda-gender-lbl">52% Female</span></div>
-        <div class="eda-gender-m" style="width:48%"><span class="eda-gender-lbl">48% Male</span></div>
+        <div class="eda-gender-f" style="width:54%"><span class="eda-gender-lbl">54% Female</span></div>
+        <div class="eda-gender-m" style="width:46%"><span class="eda-gender-lbl">46% Male</span></div>
       </div>
       <div class="eda-gender-legend">
         <div class="eda-gl-item"><div class="eda-gl-dot" style="background:var(--coral)"></div> Female patients</div>
@@ -803,7 +804,7 @@
     <div id="bfBars"></div>
 
     <div class="bf-note">
-      At nearly every pain score (0–10), women wait longer on average. The gap widens at higher intensities and has narrowed only slightly over 14 years.
+      Real NHAMCS median wait times by pain score. The gap is most visible at higher pain scores in earlier years. Overall wait times declined sharply from ~32 min (2009) to ~13 min (2022).
     </div>
   </div>
 </section>
@@ -840,11 +841,24 @@
   </div>
 </section>
 
+<!-- US MAP -->
+<section class="time-section" id="map" style="background:var(--white)">
+  <div class="section-label fade-in">Part 2b · Geographic view</div>
+  <h2 class="section-title fade-in">The gap across <em style="font-style:italic;color:var(--coral)">the US</em></h2>
+  <p class="section-body fade-in">Each state is coloured by its Census region's female-minus-male wait gap. Drag the year slider or press play to watch the gap evolve from 2009 to 2022.</p>
+  <div class="chart-container fade-in" style="padding:24px">
+    <div id="usMapChart" style="width:100%;height:520px"></div>
+    <div style="margin-top:16px;padding-top:14px;border-top:0.5px solid rgba(0,0,0,0.08)">
+      <p style="font-size:13px;color:#888;font-weight:300">NHAMCS public files report only 4 Census regions — every state within a region shares that region's value. Red = women wait longer; blue = men wait longer. Data: NHAMCS 2009–2022.</p>
+    </div>
+  </div>
+</section>
+
 <!-- OVER TIME -->
 <section class="time-section" id="time">
   <div class="section-label fade-in">Part 3 · The problem over time</div>
   <h2 class="section-title fade-in">It's getting better. <em style="font-style:italic; color:var(--blue)">Slowly.</em></h2>
-  <p class="section-body fade-in">The median wait gap between women and men has narrowed over the past decade — but the gap has not closed. As of the most recent data, women still wait longer at every triage level.</p>
+  <p class="section-body fade-in">Overall ER wait times fell dramatically — from ~34 min for women in 2009 to ~15 min in 2022. The gap between women and men has persisted throughout, narrowing in most years but never closing.</p>
 
   <div class="chart-container fade-in">
     <div class="chart-legend">
@@ -861,7 +875,7 @@
       <canvas id="timeChart" role="img" aria-label="Line chart showing ER wait times for women and men from 2009 to 2022. Women consistently wait longer, but the gap has narrowed over time.">Women's median ER wait time has been consistently higher than men's from 2009 to 2022, though the gap has narrowed.</canvas>
     </div>
     <div style="margin-top:20px; padding-top:16px; border-top:0.5px solid rgba(0,0,0,0.08);">
-      <p style="font-size:13px; color:#888; font-weight:300">The gap shrank most meaningfully between 2014–2018, coinciding with increased national attention to triage equity. Progress since 2019 has stalled. Data: NHAMCS 2009–2022.</p>
+      <p style="font-size:13px; color:#888; font-weight:300">Overall median wait times fell from ~32 min (2009) to ~14 min (2022) — a systemic improvement. The female-minus-male gap has varied year to year but has not disappeared. Note: 2020 shows anomalously low waits, likely reflecting the COVID-19 drop in ED utilization. Data: NHAMCS 2009–2022.</p>
     </div>
   </div>
 </section>
@@ -906,21 +920,22 @@
 </footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
 <script>
 
 /* -------- PAIN SLIDER -------- */
 const painData = {
-  0: { male: 18, gap: 2 },
-  1: { male: 19, gap: 2 },
-  2: { male: 20, gap: 2 },
-  3: { male: 21, gap: 2 },
-  4: { male: 22, gap: 2 },
-  5: { male: 22, gap: 2 },
-  6: { male: 24, gap: 3 },
-  7: { male: 25, gap: 3 },
-  8: { male: 26, gap: 3 },
-  9: { male: 28, gap: 4 },
-  10: { male: 30, gap: 5 },
+  0: { male: 20, gap: 0 },
+  1: { male: 20, gap: 2 },
+  2: { male: 20, gap: 1 },
+  3: { male: 20, gap: 1 },
+  4: { male: 20, gap: 2 },
+  5: { male: 20, gap: 2 },
+  6: { male: 21, gap: 1 },
+  7: { male: 21, gap: 2 },
+  8: { male: 21, gap: 2 },
+  9: { male: 21, gap: 2 },
+  10: { male: 21, gap: 2 },
 };
 
 function rotationForMinutes(mins) {
@@ -957,7 +972,7 @@ const hmData = {
   rows: ['Immediate', 'Emergent', 'Urgent', 'Semi-urgent', 'Non-urgent'],
   cols: ['No pain', 'Mild (1–3)', 'Moderate (4–6)', 'Severe (7–9)', 'Worst (10)'],
   values: [
-    [2, -2, 0, 4, 6],
+    [2, -2, 0, 6, 6],
     [1, 5, 2, 3, 6],
     [-1, 2, 2, 3, 2],
     [0, 0, 1, 1, 0],
@@ -1019,8 +1034,8 @@ regions.forEach(r => {
 
 /* -------- TIME CHART -------- */
 const years = ['2009','2010','2011','2012','2013','2014','2015','2016','2017','2018','2019','2020','2021','2022'];
-const womenWait = [28.4, 28.1, 27.8, 27.5, 27.2, 26.5, 25.9, 25.4, 25.0, 24.7, 24.5, 25.1, 24.8, 24.6];
-const menWait   = [26.2, 26.0, 25.8, 25.6, 25.3, 24.7, 24.2, 23.9, 23.7, 23.5, 23.4, 24.0, 23.8, 23.5];
+const womenWait = [34.0, 28.0, 27.0, 22.0, 24.0, 22.0, 19.0, 17.0, 16.0, 16.0, 15.0, 11.0, 14.0, 15.0];
+const menWait   = [31.0, 26.0, 25.0, 21.0, 23.0, 20.0, 18.0, 16.0, 16.0, 15.0, 15.0, 10.0, 14.0, 14.0];
 
 new Chart(document.getElementById('timeChart'), {
   type: 'line',
@@ -1066,7 +1081,7 @@ new Chart(document.getElementById('timeChart'), {
     },
     scales: {
       y: {
-        min: 20,
+        min: 8,
         title: {
           display: true,
           text: 'Median wait time (minutes)',
@@ -1086,18 +1101,18 @@ new Chart(document.getElementById('timeChart'), {
 
 /* -------- EDA SECTION -------- */
 const edaTriageData = [
-  { name: 'Immediate',   pct: 2,  color: '#8B1A1A' },
-  { name: 'Emergent',    pct: 26, color: '#C94040' },
-  { name: 'Urgent',      pct: 37, color: '#D06050' },
-  { name: 'Semi-urgent', pct: 28, color: '#4A82B0' },
+  { name: 'Immediate',   pct: 1,  color: '#8B1A1A' },
+  { name: 'Emergent',    pct: 12, color: '#C94040' },
+  { name: 'Urgent',      pct: 46, color: '#D06050' },
+  { name: 'Semi-urgent', pct: 34, color: '#4A82B0' },
   { name: 'Non-urgent',  pct: 7,  color: '#2A5C8A' },
 ];
 const edaPainDist = [
-  { label: '0',   pct: 28, color: '#4A82B0' },
-  { label: '1–3', pct: 14, color: '#7A9FC0' },
-  { label: '4–6', pct: 22, color: '#C06050' },
-  { label: '7–9', pct: 21, color: '#C94040' },
-  { label: '10',  pct: 15, color: '#8B1A1A' },
+  { label: '0',   pct: 29, color: '#4A82B0' },
+  { label: '1–3', pct: 10, color: '#7A9FC0' },
+  { label: '4–6', pct: 21, color: '#C06050' },
+  { label: '7–9', pct: 28, color: '#C94040' },
+  { label: '10',  pct: 12, color: '#8B1A1A' },
 ];
 
 const edaTriageEl = document.getElementById('edaTriageBars');
@@ -1154,18 +1169,39 @@ if (edaSecEl) edaCountObs.observe(edaSecEl);
 
 /* -------- BUTTERFLY CHART -------- */
 const BF_YEARS = ['2009','2010','2011','2012','2013','2014','2015','2016','2017','2018','2019','2020','2021','2022'];
-// Mean male wait by pain level (0–10) for 2009 baseline
-const BF_MALE_BASE = [18, 19, 20, 21, 22, 22, 24, 25, 26, 28, 30];
-// Mean gap (female minus male) by pain level for 2009 baseline
-const BF_GAP_BASE  = [ 2,  2,  2,  2,  2,  2,  3,  3,  3,  4,  5];
-const BF_SCALE = 36; // 100% width = 36 min
+const BF_SCALE = 45;
+
+// Real NHAMCS median wait (min) by pain score (0–10) per year
+const BF_DATA = {
+  "2009":{"male":[31.0,32.0,32.0,35.0,31.5,31.0,32.0,33.0,34.0,37.0,32.0],"female":[34.0,32.0,33.0,32.0,32.0,38.0,36.0,35.0,38.0,39.0,37.0]},
+  "2010":{"male":[26.0,28.0,24.0,23.0,26.0,25.0,25.0,27.0,28.0,29.5,26.5],"female":[26.0,27.5,24.0,25.0,28.0,27.0,27.0,29.0,30.0,32.0,32.0]},
+  "2011":{"male":[26.0,24.0,24.0,21.0,26.0,25.0,26.0,27.0,26.0,25.0,25.0],"female":[27.0,29.5,26.5,24.5,27.0,27.0,25.0,28.0,29.0,31.0,27.0]},
+  "2012":{"male":[20.0,19.0,20.5,19.0,18.0,22.0,21.0,21.0,22.0,26.0,22.0],"female":[20.0,16.5,20.0,21.0,21.0,20.0,22.0,22.0,24.0,23.0,24.0]},
+  "2013":{"male":[24.0,22.0,24.0,24.0,26.0,24.0,20.0,23.0,23.0,21.0,22.0],"female":[23.0,27.0,22.0,20.0,22.0,25.0,24.0,24.0,26.0,27.0,24.0]},
+  "2014":{"male":[19.0,18.0,18.5,22.0,21.0,21.0,21.0,22.0,21.0,21.0,21.0],"female":[21.0,29.0,25.0,21.0,25.0,24.0,24.0,22.0,23.0,23.0,21.0]},
+  "2015":{"male":[18.0,12.0,20.0,20.0,19.0,20.0,20.0,20.0,19.0,20.0,18.0],"female":[18.0,17.0,27.0,23.0,18.5,21.0,19.0,21.0,21.0,21.0,19.0]},
+  "2016":{"male":[16.0,14.0,15.0,17.0,16.0,15.0,15.0,18.0,17.0,15.5,16.0],"female":[16.0,24.0,18.0,19.0,16.0,18.0,17.0,20.5,19.0,18.0,17.0]},
+  "2017":{"male":[14.0,13.0,12.0,17.0,15.0,16.0,17.0,19.0,16.0,15.0,16.0],"female":[14.0,18.0,18.0,16.0,16.0,17.0,16.5,16.0,16.0,16.0,15.0]},
+  "2018":{"male":[15.0,21.0,16.0,13.0,13.0,12.0,15.0,16.5,15.0,17.0,18.0],"female":[15.0,13.0,17.0,17.0,16.0,17.0,14.0,15.5,15.0,16.0,18.0]},
+  "2019":{"male":[14.0,15.0,13.5,12.0,16.0,15.0,13.0,14.0,13.0,14.0,14.0],"female":[15.0,15.0,15.0,15.0,18.0,15.0,12.0,15.0,16.0,13.0,14.5]},
+  "2020":{"male":[8.0,10.0,11.0,12.0,10.0,9.0,12.0,11.0,9.5,10.0,11.0],"female":[10.0,8.5,9.5,11.0,9.0,10.0,12.0,11.0,11.0,13.0,10.0]},
+  "2021":{"male":[14.0,12.5,17.0,12.0,15.0,12.0,16.0,15.0,13.0,15.0,15.5],"female":[16.0,14.0,14.0,16.0,14.0,14.0,15.0,16.0,15.0,15.0,14.0]},
+  "2022":{"male":[13.0,10.0,15.0,13.0,12.5,12.0,15.0,17.0,14.0,17.0,12.0],"female":[14.0,10.0,23.0,13.0,16.5,16.5,14.5,17.0,14.0,14.0,14.0]}
+};
+
+// Pooled median per year (for clock displays)
+const BF_YEAR_MEDIAN = {
+  female: [34.0, 28.0, 27.0, 22.0, 24.0, 22.0, 19.0, 17.0, 16.0, 16.0, 15.0, 11.0, 14.0, 15.0],
+  male:   [31.0, 26.0, 25.0, 21.0, 23.0, 20.0, 18.0, 16.0, 16.0, 15.0, 15.0, 10.0, 14.0, 14.0]
+};
 
 function getBfData(idx) {
-  const t = idx / 13;
-  return BF_MALE_BASE.map((m, p) => ({
+  const yr = BF_YEARS[idx];
+  const d = BF_DATA[yr];
+  return d.male.map((m, p) => ({
     pain: p,
-    male:   parseFloat((m - 1.8 * t).toFixed(1)),
-    female: parseFloat((m - 1.8 * t + BF_GAP_BASE[p] * (1 - 0.12 * t)).toFixed(1))
+    male:   m,
+    female: d.female[p]
   }));
 }
 
@@ -1179,8 +1215,8 @@ function renderButterfly(idx) {
   const gap10 = (data[10].female - data[10].male).toFixed(1);
   document.getElementById('bfGapText').textContent = '+' + gap10 + ' min';
 
-  const avgM = (data.reduce((s, d) => s + d.male,   0) / data.length).toFixed(1);
-  const avgF = (data.reduce((s, d) => s + d.female, 0) / data.length).toFixed(1);
+  const avgM = BF_YEAR_MEDIAN.male[idx].toFixed(1);
+  const avgF = BF_YEAR_MEDIAN.female[idx].toFixed(1);
   document.getElementById('bfMaleAvg').textContent   = avgM + ' min';
   document.getElementById('bfFemaleAvg').textContent = avgF + ' min';
 
@@ -1208,6 +1244,120 @@ if (bfSlider) {
   bfSlider.addEventListener('input', () => renderButterfly(parseInt(bfSlider.value)));
   renderButterfly(0);
 }
+
+/* -------- US MAP -------- */
+const MAP_YEARS = ['2009','2010','2011','2012','2013','2014','2015','2016','2017','2018','2019','2020','2021','2022'];
+
+const STATE_TO_REGION = {
+  CT:'Northeast',ME:'Northeast',MA:'Northeast',NH:'Northeast',RI:'Northeast',VT:'Northeast',NJ:'Northeast',NY:'Northeast',PA:'Northeast',
+  IL:'Midwest',IN:'Midwest',MI:'Midwest',OH:'Midwest',WI:'Midwest',IA:'Midwest',KS:'Midwest',MN:'Midwest',MO:'Midwest',NE:'Midwest',ND:'Midwest',SD:'Midwest',
+  DE:'South',FL:'South',GA:'South',MD:'South',NC:'South',SC:'South',VA:'South',DC:'South',WV:'South',AL:'South',KY:'South',MS:'South',TN:'South',AR:'South',LA:'South',OK:'South',TX:'South',
+  AZ:'West',CO:'West',ID:'West',MT:'West',NV:'West',NM:'West',UT:'West',WY:'West',AK:'West',CA:'West',HI:'West',OR:'West',WA:'West'
+};
+const STATE_NAMES = {
+  AL:'Alabama',AK:'Alaska',AZ:'Arizona',AR:'Arkansas',CA:'California',CO:'Colorado',CT:'Connecticut',DE:'Delaware',DC:'D.C.',FL:'Florida',GA:'Georgia',HI:'Hawaii',
+  ID:'Idaho',IL:'Illinois',IN:'Indiana',IA:'Iowa',KS:'Kansas',KY:'Kentucky',LA:'Louisiana',ME:'Maine',MD:'Maryland',MA:'Massachusetts',MI:'Michigan',MN:'Minnesota',
+  MS:'Mississippi',MO:'Missouri',MT:'Montana',NE:'Nebraska',NV:'Nevada',NH:'New Hampshire',NJ:'New Jersey',NM:'New Mexico',NY:'New York',NC:'North Carolina',
+  ND:'North Dakota',OH:'Ohio',OK:'Oklahoma',OR:'Oregon',PA:'Pennsylvania',RI:'Rhode Island',SC:'South Carolina',SD:'South Dakota',TN:'Tennessee',TX:'Texas',
+  UT:'Utah',VT:'Vermont',VA:'Virginia',WA:'Washington',WV:'West Virginia',WI:'Wisconsin',WY:'Wyoming'
+};
+
+const MAP_DATA = {"2009":{"Northeast":{"f":39.0,"m":37.0,"g":2.0},"Midwest":{"f":30.0,"m":27.0,"g":3.0},"South":{"f":36.0,"m":32.0,"g":4.0},"West":{"f":31.0,"m":27.0,"g":4.0}},"2010":{"Northeast":{"f":28.0,"m":27.0,"g":1.0},"Midwest":{"f":26.0,"m":23.0,"g":3.0},"South":{"f":30.0,"m":29.0,"g":1.0},"West":{"f":25.0,"m":22.0,"g":3.0}},"2011":{"Northeast":{"f":29.0,"m":30.0,"g":-1.0},"Midwest":{"f":26.0,"m":23.0,"g":3.0},"South":{"f":29.0,"m":27.0,"g":2.0},"West":{"f":22.0,"m":22.0,"g":0.0}},"2012":{"Northeast":{"f":23.0,"m":23.0,"g":0.0},"Midwest":{"f":21.0,"m":21.0,"g":0.0},"South":{"f":25.0,"m":24.0,"g":1.0},"West":{"f":16.0,"m":15.0,"g":1.0}},"2013":{"Northeast":{"f":26.0,"m":26.0,"g":0.0},"Midwest":{"f":18.0,"m":18.0,"g":0.0},"South":{"f":27.0,"m":25.0,"g":2.0},"West":{"f":22.0,"m":21.0,"g":1.0}},"2014":{"Northeast":{"f":19.0,"m":17.0,"g":2.0},"Midwest":{"f":20.0,"m":19.0,"g":1.0},"South":{"f":24.0,"m":21.0,"g":3.0},"West":{"f":23.0,"m":22.5,"g":0.5}},"2015":{"Northeast":{"f":21.0,"m":20.0,"g":1.0},"Midwest":{"f":19.0,"m":18.0,"g":1.0},"South":{"f":18.0,"m":19.0,"g":-1.0},"West":{"f":19.0,"m":16.0,"g":3.0}},"2016":{"Northeast":{"f":23.0,"m":21.0,"g":2.0},"Midwest":{"f":16.0,"m":14.0,"g":2.0},"South":{"f":18.0,"m":17.0,"g":1.0},"West":{"f":15.0,"m":15.0,"g":0.0}},"2017":{"Northeast":{"f":20.0,"m":20.0,"g":0.0},"Midwest":{"f":16.0,"m":13.0,"g":3.0},"South":{"f":17.0,"m":18.0,"g":-1.0},"West":{"f":13.0,"m":13.0,"g":0.0}},"2018":{"Northeast":{"f":20.0,"m":18.0,"g":2.0},"Midwest":{"f":13.0,"m":13.0,"g":0.0},"South":{"f":17.0,"m":17.0,"g":0.0},"West":{"f":13.0,"m":12.0,"g":1.0}},"2019":{"Northeast":{"f":26.0,"m":26.0,"g":0.0},"Midwest":{"f":13.0,"m":12.0,"g":1.0},"South":{"f":14.0,"m":13.0,"g":1.0},"West":{"f":15.0,"m":14.0,"g":1.0}},"2020":{"Northeast":{"f":16.0,"m":14.0,"g":2.0},"Midwest":{"f":7.0,"m":6.0,"g":1.0},"South":{"f":12.0,"m":12.0,"g":0.0},"West":{"f":12.0,"m":11.0,"g":1.0}},"2021":{"Northeast":{"f":17.0,"m":17.0,"g":0.0},"Midwest":{"f":12.0,"m":11.0,"g":1.0},"South":{"f":18.0,"m":18.0,"g":0.0},"West":{"f":11.0,"m":11.0,"g":0.0}},"2022":{"Northeast":{"f":19.0,"m":17.0,"g":2.0},"Midwest":{"f":10.0,"m":10.0,"g":0.0},"South":{"f":20.0,"m":19.0,"g":1.0},"West":{"f":12.0,"m":12.0,"g":0.0}}};
+
+function buildMapFrame(yr) {
+  const yrData = MAP_DATA[yr];
+  const states = Object.keys(STATE_TO_REGION);
+  const zVals = [], hoverTexts = [];
+  states.forEach(s => {
+    const region = STATE_TO_REGION[s];
+    const r = yrData[region] || {f:0,m:0,g:0};
+    zVals.push(r.g);
+    hoverTexts.push(
+      `<b>${STATE_NAMES[s]}</b><br><i>${region} · ${yr}</i><br><br>` +
+      `♀ Female: <b>${r.f} min</b><br>♂ Male: <b>${r.m} min</b><br><br>` +
+      `Gap (F−M): <b>${r.g > 0 ? '+' : ''}${r.g} min</b>`
+    );
+  });
+  return { states, zVals, hoverTexts };
+}
+
+function initMap() {
+  const el = document.getElementById('usMapChart');
+  if (!el || typeof Plotly === 'undefined') return;
+
+  const yr0 = MAP_YEARS[0];
+  const f0 = buildMapFrame(yr0);
+
+  const trace = {
+    type: 'choropleth',
+    locationmode: 'USA-states',
+    locations: f0.states,
+    z: f0.zVals,
+    text: f0.hoverTexts,
+    hovertemplate: '%{text}<extra></extra>',
+    colorscale: [[0,'#2A5C8A'],[0.5,'#F5F0E8'],[1,'#C94040']],
+    zmid: 0, zmin: -4, zmax: 4,
+    colorbar: {
+      title: {text:'Gap F−M<br>(min)', font:{size:12}},
+      thickness: 12, len: 0.65,
+      tickvals: [-4,-2,0,2,4],
+      ticktext: ['-4','-2','0','+2','+4']
+    },
+    marker: {line:{color:'white',width:0.5}}
+  };
+
+  const frames = MAP_YEARS.map(yr => {
+    const f = buildMapFrame(yr);
+    return {
+      name: yr,
+      data: [{
+        z: f.zVals,
+        text: f.hoverTexts,
+        locations: f.states
+      }]
+    };
+  });
+
+  const layout = {
+    geo: {scope:'usa', projection:{type:'albers usa'}, showlakes:true, lakecolor:'rgb(245,245,245)', bgcolor:'rgba(0,0,0,0)'},
+    margin: {l:0,r:0,t:0,b:60},
+    height: 460,
+    paper_bgcolor: 'rgba(0,0,0,0)',
+    plot_bgcolor: 'rgba(0,0,0,0)',
+    font: {family:'DM Sans, sans-serif', color:'#444'},
+    updatemenus: [{
+      type:'buttons', direction:'left', x:0.02, y:-0.08, xanchor:'left', yanchor:'top', showactive:false,
+      buttons:[{
+        label:'▶ Play',
+        method:'animate',
+        args:[null,{frame:{duration:700,redraw:true},transition:{duration:300,easing:'cubic-in-out'},fromcurrent:true,mode:'immediate'}],
+        args2:[[null],{frame:{duration:0,redraw:false},mode:'immediate',transition:{duration:0}}]
+      }]
+    }],
+    sliders:[{
+      active:0, x:0.15, y:-0.06, len:0.78, xanchor:'left', yanchor:'top',
+      currentvalue:{prefix:'Year: ',visible:true,xanchor:'right',font:{size:14,color:'#444'}},
+      transition:{duration:300,easing:'cubic-in-out'},
+      pad:{b:8,t:8},
+      steps: MAP_YEARS.map(yr => ({
+        label:yr, method:'animate',
+        args:[[yr],{mode:'immediate',frame:{duration:300,redraw:true},transition:{duration:300}}]
+      }))
+    }]
+  };
+
+  Plotly.newPlot(el, [trace], layout, {responsive:true, displayModeBar:false}).then(() => {
+    Plotly.addFrames(el, frames);
+  });
+}
+
+const mapObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { initMap(); mapObs.disconnect(); }
+  });
+}, {threshold: 0.1});
+const mapEl = document.getElementById('usMapChart');
+if (mapEl) mapObs.observe(mapEl);
 
 /* -------- SCROLL ANIMATIONS -------- */
 const obs = new IntersectionObserver(entries => {

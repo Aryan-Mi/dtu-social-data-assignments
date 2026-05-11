@@ -916,7 +916,7 @@
     <h2>Urgent. Possible cardiac event.</h2>
     <p>The triage nurse assigns Adam an <strong>ESI Level 2</strong> — urgent, requiring rapid assessment. His chest pain presentation is flagged as potentially cardiac in origin.</p>
 
-    <div class="data-embed" data-label="NHAMCS · Triage Level by Sex, Chest Pain Presentations">
+    <div class="data-embed" data-label="NHAMCS 2009–2022 · Triage Level by Sex, Chest Pain Diagnoses">
       <div class="chart-title">TRIAGE URGENCY LEVEL ASSIGNED — CHEST PAIN (MALE)</div>
       <div class="triage-display" id="triage-adam">
         <!-- filled by JS -->
@@ -931,13 +931,13 @@
         <div class="chart-title">% ASSIGNED ESI 1–2 (HIGHEST URGENCY), CHEST PAIN</div>
         <div class="bar-row">
           <div class="bar-label">Male</div>
-          <div class="bar-track"><div class="bar-fill adam" data-width="58%"></div></div>
-          <div class="bar-value">58%</div>
+          <div class="bar-track"><div class="bar-fill adam" data-width="31%"></div></div>
+          <div class="bar-value">31%</div>
         </div>
         <div class="bar-row">
           <div class="bar-label">Female</div>
-          <div class="bar-track"><div class="bar-fill eve" data-width="44%"></div></div>
-          <div class="bar-value">44%</div>
+          <div class="bar-track"><div class="bar-fill eve" data-width="29%"></div></div>
+          <div class="bar-value">29%</div>
         </div>
       </div>
     </div>
@@ -961,7 +961,7 @@
     <h2>Moderate urgency. Possibly stress.</h2>
     <p>The triage nurse assigns Eve an <strong>ESI Level 3</strong> — urgent but not emergent. A note in her chart suggests the chest pain may be anxiety-related. She is asked to take a seat.</p>
 
-    <div class="data-embed" data-label="NHAMCS · Triage Level by Sex, Chest Pain Presentations">
+    <div class="data-embed" data-label="NHAMCS 2009–2022 · Triage Level by Sex, Chest Pain Diagnoses">
       <div class="chart-title">TRIAGE URGENCY LEVEL ASSIGNED — CHEST PAIN (FEMALE)</div>
       <div class="triage-display" id="triage-eve"></div>
       <div style="margin-top:0.75rem;">
@@ -974,13 +974,13 @@
         <div class="chart-title">% ASSIGNED ESI 1–2 (HIGHEST URGENCY), CHEST PAIN</div>
         <div class="bar-row">
           <div class="bar-label">Male</div>
-          <div class="bar-track"><div class="bar-fill adam" data-width="58%"></div></div>
-          <div class="bar-value">58%</div>
+          <div class="bar-track"><div class="bar-fill adam" data-width="31%"></div></div>
+          <div class="bar-value">31%</div>
         </div>
         <div class="bar-row">
           <div class="bar-label">Female</div>
-          <div class="bar-track"><div class="bar-fill eve" data-width="44%"></div></div>
-          <div class="bar-value">44%</div>
+          <div class="bar-track"><div class="bar-fill eve" data-width="29%"></div></div>
+          <div class="bar-value">29%</div>
         </div>
       </div>
     </div>
@@ -1004,11 +1004,11 @@
     <p>Given his ESI Level 2 classification, Adam is moved to a treatment room quickly. A nurse begins cardiac monitoring almost immediately.</p>
 
     <div class="wait-display">
-      <div class="wait-number" style="color: var(--adam)" id="adam-wait">24</div>
+      <div class="wait-number" style="color: var(--adam)" id="adam-wait">17</div>
       <div class="wait-unit">MEDIAN WAIT TIME · MINUTES</div>
     </div>
 
-    <div class="data-embed" data-label="NHAMCS · Wait Time Distribution by Sex, Chest Pain">
+    <div class="data-embed" data-label="NHAMCS 2009–2022 · Wait Time Distribution by Sex, All ED Diagnoses">
       <div class="chart-title">WAIT TIME DISTRIBUTION (MINUTES) — CHEST PAIN BY SEX</div>
       <div class="dot-plot">
         <div class="dot-row">
@@ -1032,8 +1032,8 @@
     </div>
 
     <div class="stat-callout adam">
-      <div class="stat-figure" style="color:var(--adam)">24 min</div>
-      <div class="stat-desc">MEDIAN WAIT, MALE CHEST PAIN PATIENTS<br>SOURCE: NHAMCS 2012–2022 POOLED</div>
+      <div class="stat-figure" style="color:var(--adam)">17 min</div>
+      <div class="stat-desc">MEDIAN WAIT, MALE CHEST PAIN PATIENTS<br>SOURCE: NHAMCS 2009–2022 POOLED</div>
     </div>
   </div>
 
@@ -1055,11 +1055,11 @@
     <p>With her ESI Level 3 assignment, Eve waits. And waits. Other patients are called before her. She asks the desk twice about her status. She is told to be patient.</p>
 
     <div class="wait-display">
-      <div class="wait-number" style="color: var(--eve)" id="eve-wait">55</div>
+      <div class="wait-number" style="color: var(--eve)" id="eve-wait">18</div>
       <div class="wait-unit">MEDIAN WAIT TIME · MINUTES</div>
     </div>
 
-    <div class="data-embed" data-label="NHAMCS · Wait Time Distribution by Sex, Chest Pain">
+    <div class="data-embed" data-label="NHAMCS 2009–2022 · Wait Time Distribution by Sex, All ED Diagnoses">
       <div class="chart-title">WAIT TIME DISTRIBUTION (MINUTES) — CHEST PAIN BY SEX</div>
       <div class="dot-plot">
         <div class="dot-row">
@@ -1083,8 +1083,8 @@
     </div>
 
     <div class="stat-callout eve">
-      <div class="stat-figure" style="color:var(--eve)">55 min</div>
-      <div class="stat-desc">MEDIAN WAIT, FEMALE CHEST PAIN PATIENTS<br>SOURCE: NHAMCS 2012–2022 POOLED</div>
+      <div class="stat-figure" style="color:var(--eve)">18 min</div>
+      <div class="stat-desc">MEDIAN WAIT, FEMALE CHEST PAIN PATIENTS<br>SOURCE: NHAMCS 2009–2022 POOLED</div>
     </div>
   </div>
 </div>
@@ -1109,34 +1109,34 @@
       <div class="dx-name">Unstable Angina / ACS Rule-Out</div>
     </div>
 
-    <div class="data-embed" data-label="NHAMCS · Diagnostic Testing Ordered by Sex, Chest Pain">
+    <div class="data-embed" data-label="NHAMCS 2009–2022 · ECG Ordered by Sex, Chest Pain Diagnoses">
       <div class="chart-title">% OF CHEST PAIN VISITS WITH ECG ORDERED</div>
       <div class="bar-chart">
         <div class="bar-row">
           <div class="bar-label">Male</div>
-          <div class="bar-track"><div class="bar-fill adam" data-width="71%"></div></div>
-          <div class="bar-value">71%</div>
+          <div class="bar-track"><div class="bar-fill adam" data-width="83%"></div></div>
+          <div class="bar-value">83%</div>
         </div>
         <div class="bar-row">
           <div class="bar-label">Female</div>
-          <div class="bar-track"><div class="bar-fill eve" data-width="54%"></div></div>
-          <div class="bar-value">54%</div>
+          <div class="bar-track"><div class="bar-fill eve" data-width="83%"></div></div>
+          <div class="bar-value">83%</div>
         </div>
       </div>
     </div>
 
-    <div class="data-embed" data-label="NHAMCS · Cardiology Referrals by Sex">
-      <div class="chart-title">% OF CHEST PAIN VISITS WITH CARDIOLOGY REFERRAL</div>
+    <div class="data-embed" data-label="NHAMCS · Specialist Consultation by Sex (proxy for cardiology referral)">
+      <div class="chart-title">% OF CHEST PAIN VISITS WITH SPECIALIST CONSULTATION</div>
       <div class="bar-chart">
         <div class="bar-row">
           <div class="bar-label">Male</div>
-          <div class="bar-track"><div class="bar-fill adam" data-width="34%"></div></div>
-          <div class="bar-value">34%</div>
+          <div class="bar-track"><div class="bar-fill adam" data-width="16%"></div></div>
+          <div class="bar-value">16%</div>
         </div>
         <div class="bar-row">
           <div class="bar-label">Female</div>
-          <div class="bar-track"><div class="bar-fill eve" data-width="19%"></div></div>
-          <div class="bar-value">19%</div>
+          <div class="bar-track"><div class="bar-fill eve" data-width="14%"></div></div>
+          <div class="bar-value">14%</div>
         </div>
       </div>
     </div>
@@ -1174,18 +1174,18 @@
       </div>
     </div>
 
-    <div class="data-embed" data-label="NHAMCS · Anxiolytic Prescribing by Sex, ED Chest Pain">
+    <div class="data-embed" data-label="NHAMCS 2009–2022 · Benzodiazepine Prescribing by Sex, Chest Pain Diagnoses">
       <div class="chart-title">% CHEST PAIN VISITS PRESCRIBED ANXIOLYTICS</div>
       <div class="bar-chart">
         <div class="bar-row">
           <div class="bar-label">Male</div>
-          <div class="bar-track"><div class="bar-fill adam" data-width="11%"></div></div>
-          <div class="bar-value">11%</div>
+          <div class="bar-track"><div class="bar-fill adam" data-width="9%"></div></div>
+          <div class="bar-value">9%</div>
         </div>
         <div class="bar-row">
           <div class="bar-label">Female</div>
-          <div class="bar-track"><div class="bar-fill eve" data-width="26%"></div></div>
-          <div class="bar-value">26%</div>
+          <div class="bar-track"><div class="bar-fill eve" data-width="10%"></div></div>
+          <div class="bar-value">10%</div>
         </div>
       </div>
     </div>
@@ -1247,12 +1247,12 @@
     <div class="outcome-box adam">
       <div class="name">ADAM · MALE · 38</div>
       <div class="result">Cardiac workup<br>Day 1</div>
-      <div class="detail">ESI Level 2 · 24 min wait<br>ECG + Troponin ordered<br>Cardiology referral<br>Stent placed</div>
+      <div class="detail">ESI Level 2 · 17 min wait<br>ECG + Troponin ordered<br>Cardiology referral<br>Stent placed</div>
     </div>
     <div class="outcome-box eve">
       <div class="name">EVE · FEMALE · 38</div>
       <div class="result">Anxiolytic<br>Day 1</div>
-      <div class="detail">ESI Level 3 · 55 min wait<br>No ECG ordered<br>Anxiety diagnosis<br>MI confirmed Day 4</div>
+      <div class="detail">ESI Level 3 · 18 min wait<br>No ECG ordered<br>Anxiety diagnosis<br>MI confirmed Day 4</div>
     </div>
   </div>
   <p class="coda">This is not a single story. In NHAMCS data covering over 30 years and hundreds of thousands of emergency visits, the patterns Adam and Eve represent appear consistently — in chest pain, abdominal pain, and across pain scores. The disparity is not a flaw in any one nurse or physician. It is structural, measurable, and ongoing.</p>
@@ -1382,16 +1382,16 @@ function buildDots(containerId, counts, color) {
     el.appendChild(dot);
   }
 }
-// Adam: faster waits
-buildDots('dots-adam-fast', 14, '#2e6da4');
-buildDots('dots-adam-med', 18, '#2e6da4');
-buildDots('dots-adam-slow', 12, '#6aaedc');
-buildDots('dots-adam-long', 6, '#b0d4f0');
-// Eve: slower waits
-buildDots('dots-eve-fast', 7, '#a42e47');
-buildDots('dots-eve-med', 12, '#a42e47');
-buildDots('dots-eve-slow', 17, '#d47a8e');
-buildDots('dots-eve-long', 14, '#e8b0bc');
+// Male wait-time distribution (NHAMCS 2009–2022): <15min=40%, 15-30=22%, 30-60=18%, >60=20%
+buildDots('dots-adam-fast', 20, '#2e6da4');
+buildDots('dots-adam-med', 11, '#2e6da4');
+buildDots('dots-adam-slow', 9, '#6aaedc');
+buildDots('dots-adam-long', 10, '#b0d4f0');
+// Female wait-time distribution (NHAMCS 2009–2022): <15min=38%, 15-30=22%, 30-60=18%, >60=22%
+buildDots('dots-eve-fast', 19, '#a42e47');
+buildDots('dots-eve-med', 11, '#a42e47');
+buildDots('dots-eve-slow', 9, '#d47a8e');
+buildDots('dots-eve-long', 11, '#e8b0bc');
 
 // Animate dots on intersection
 const dotContainers = document.querySelectorAll('.dot-track');
@@ -1439,52 +1439,53 @@ function countUp(el, target, duration = 1200) {
 const waitObs = new IntersectionObserver((entries) => {
   entries.forEach(e => {
     if (e.isIntersecting) {
-      if (e.target.id === 'adam-wait') countUp(e.target, 24);
-      if (e.target.id === 'eve-wait') countUp(e.target, 55);
+      if (e.target.id === 'adam-wait') countUp(e.target, 17);
+      if (e.target.id === 'eve-wait') countUp(e.target, 18);
       waitObs.unobserve(e.target);
     }
   });
 }, { threshold: 0.5 });
 document.querySelectorAll('#adam-wait, #eve-wait').forEach(el => waitObs.observe(el));
 
-// ── EXPLORER ──
+// ── EXPLORER — values computed from NHAMCS 2009–2022 (section 9, 01_explore.ipynb) ──
+// Format: [Male, Female]. triage = % assigned ESI 1–2; cardiology = % with specialist consult.
 const explorerData = {
   chest: {
-    severe:   { triage: [58, 44], wait: [24, 55], ecg: [71, 54], cardiology: [34, 19], anxiolytic: [11, 26] },
-    moderate: { triage: [45, 36], wait: [31, 58], ecg: [55, 42], cardiology: [22, 13], anxiolytic: [14, 29] },
-    mild:     { triage: [38, 29], wait: [38, 62], ecg: [44, 35], cardiology: [15, 9],  anxiolytic: [16, 30] },
-    all:      { triage: [52, 40], wait: [27, 57], ecg: [64, 49], cardiology: [28, 16], anxiolytic: [12, 27] }
+    severe:   { triage: [32, 31], wait: [18, 19], ecg: [80, 82], cardiology: [16, 14], anxiolytic: [10, 12] },
+    moderate: { triage: [32, 31], wait: [18, 18], ecg: [86, 85], cardiology: [14, 14], anxiolytic: [8,  12] },
+    mild:     { triage: [35, 29], wait: [15, 18], ecg: [87, 85], cardiology: [17, 15], anxiolytic: [8,  10] },
+    all:      { triage: [31, 29], wait: [17, 18], ecg: [83, 83], cardiology: [16, 14], anxiolytic: [9,  10] }
   },
   abdominal: {
-    severe:   { triage: [51, 41], wait: [28, 52], ecg: [12, 9],  cardiology: [8, 5],   anxiolytic: [9, 22] },
-    moderate: { triage: [40, 32], wait: [34, 55], ecg: [10, 7],  cardiology: [5, 3],   anxiolytic: [12, 25] },
-    mild:     { triage: [31, 24], wait: [42, 64], ecg: [8, 6],   cardiology: [3, 2],   anxiolytic: [13, 24] },
-    all:      { triage: [44, 36], wait: [32, 55], ecg: [11, 8],  cardiology: [7, 4],   anxiolytic: [11, 23] }
+    severe:   { triage: [10, 6],  wait: [22, 24], ecg: [20, 14], cardiology: [10, 8],  anxiolytic: [7,  9]  },
+    moderate: { triage: [6,  5],  wait: [23, 25], ecg: [20, 13], cardiology: [8,  7],  anxiolytic: [8,  10] },
+    mild:     { triage: [6,  5],  wait: [21, 24], ecg: [19, 15], cardiology: [7,  8],  anxiolytic: [8,  11] },
+    all:      { triage: [8,  6],  wait: [22, 24], ecg: [19, 15], cardiology: [9,  8],  anxiolytic: [8,  9]  }
   },
   headache: {
-    severe:   { triage: [42, 33], wait: [30, 58], ecg: [8, 5],   cardiology: [4, 2],   anxiolytic: [15, 34] },
-    moderate: { triage: [34, 26], wait: [36, 62], ecg: [6, 4],   cardiology: [3, 2],   anxiolytic: [18, 37] },
-    mild:     { triage: [26, 19], wait: [44, 68], ecg: [4, 3],   cardiology: [2, 1],   anxiolytic: [19, 36] },
-    all:      { triage: [38, 29], wait: [33, 60], ecg: [7, 4],   cardiology: [3, 2],   anxiolytic: [16, 35] }
+    severe:   { triage: [9,  8],  wait: [23, 24], ecg: [13, 11], cardiology: [7,  4],  anxiolytic: [14, 11] },
+    moderate: { triage: [5,  9],  wait: [24, 23], ecg: [14, 14], cardiology: [5,  5],  anxiolytic: [16, 16] },
+    mild:     { triage: [12, 10], wait: [30, 27], ecg: [14, 16], cardiology: [7,  8],  anxiolytic: [17, 16] },
+    all:      { triage: [8,  8],  wait: [24, 24], ecg: [15, 13], cardiology: [7,  5],  anxiolytic: [16, 13] }
   },
   back: {
-    severe:   { triage: [38, 29], wait: [33, 54], ecg: [5, 3],   cardiology: [3, 2],   anxiolytic: [12, 28] },
-    moderate: { triage: [30, 22], wait: [38, 57], ecg: [4, 2],   cardiology: [2, 1],   anxiolytic: [14, 30] },
-    mild:     { triage: [22, 16], wait: [46, 64], ecg: [3, 2],   cardiology: [1, 1],   anxiolytic: [15, 29] },
-    all:      { triage: [33, 25], wait: [36, 56], ecg: [4, 2],   cardiology: [2, 1],   anxiolytic: [13, 29] }
+    severe:   { triage: [4,  4],  wait: [24, 23], ecg: [6,  8],  cardiology: [4,  4],  anxiolytic: [9,  11] },
+    moderate: { triage: [5,  4],  wait: [24, 24], ecg: [6,  8],  cardiology: [7,  5],  anxiolytic: [10, 13] },
+    mild:     { triage: [5,  6],  wait: [22, 22], ecg: [10, 12], cardiology: [5,  5],  anxiolytic: [10, 10] },
+    all:      { triage: [5,  5],  wait: [23, 23], ecg: [7,  8],  cardiology: [5,  5],  anxiolytic: [9,  11] }
   },
   shortness: {
-    severe:   { triage: [64, 51], wait: [21, 44], ecg: [68, 55], cardiology: [29, 17], anxiolytic: [8, 19] },
-    moderate: { triage: [52, 41], wait: [26, 50], ecg: [58, 44], cardiology: [20, 12], anxiolytic: [10, 21] },
-    mild:     { triage: [40, 32], wait: [33, 55], ecg: [46, 35], cardiology: [13, 8],  anxiolytic: [11, 22] },
-    all:      { triage: [56, 44], wait: [24, 47], ecg: [62, 48], cardiology: [24, 14], anxiolytic: [9, 20] }
+    severe:   { triage: [30, 27], wait: [20, 23], ecg: [75, 75], cardiology: [15, 12], anxiolytic: [10, 10] },
+    moderate: { triage: [30, 28], wait: [21, 23], ecg: [81, 77], cardiology: [15, 14], anxiolytic: [6,  10] },
+    mild:     { triage: [32, 28], wait: [18, 19], ecg: [78, 74], cardiology: [15, 15], anxiolytic: [8,  10] },
+    all:      { triage: [29, 26], wait: [19, 20], ecg: [70, 70], cardiology: [15, 13], anxiolytic: [8,  9]  }
   }
 };
 
 const metrics = [
   { key: 'triage', label: '% ASSIGNED HIGHEST URGENCY (ESI 1–2)', unit: '%' },
   { key: 'ecg', label: '% WITH ECG ORDERED', unit: '%' },
-  { key: 'cardiology', label: '% WITH CARDIOLOGY REFERRAL', unit: '%' },
+  { key: 'cardiology', label: '% WITH SPECIALIST CONSULTATION', unit: '%' },
   { key: 'anxiolytic', label: '% PRESCRIBED ANXIOLYTICS', unit: '%' },
   { key: 'wait', label: 'MEDIAN WAIT TIME (MINUTES)', unit: ' min' },
 ];
@@ -1495,9 +1496,8 @@ function renderExplorer() {
   const years = document.getElementById('ctrl-years').value;
   const d = explorerData[complaint][pain];
 
-  // vary slightly by year for realism
-  const yearMult = { '2012-2022': 1.0, '2005-2011': 1.05, '1999-2004': 1.08, 'all': 1.02 };
-  const mult = yearMult[years];
+  // data covers 2009–2022; year selector noted in label but values are pooled
+  const mult = 1.0;
 
   const complaintNames = { chest:'chest pain', abdominal:'abdominal pain', headache:'headache / migraine', back:'back pain', shortness:'shortness of breath' };
   const painNames = { severe:'severe pain (8–10)', moderate:'moderate pain (5–7)', mild:'mild pain (1–4)', all:'all pain levels' };

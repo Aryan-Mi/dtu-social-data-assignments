@@ -296,7 +296,8 @@
     background: linear-gradient(145deg, var(--sand), var(--sand-warm));
     border-radius: 24px;
     padding: 56px;
-    max-width: 760px;
+    max-width: 860px;
+    margin: 0 auto;
     border: 0.5px solid var(--line);
     box-shadow: 0 4px 32px rgba(20,17,14,0.04);
     transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
@@ -309,8 +310,9 @@
     font-family: 'Fraunces', serif;
     font-size: 24px; margin-bottom: 8px;
     font-weight: 500; letter-spacing: -0.01em;
+    text-align: center;
   }
-  .quiz-subtext { font-size: 14px; color: var(--ink-light); margin-bottom: 36px; font-weight: 400; }
+  .quiz-subtext { font-size: 14px; color: var(--ink-light); margin-bottom: 36px; font-weight: 400; text-align: center; }
 
   .pain-slider-row { display: flex; align-items: center; gap: 24px; margin-bottom: 40px; }
   .pain-label { font-size: 12px; color: var(--ink-light); font-weight: 500; min-width: 90px; letter-spacing: 0.04em; text-transform: uppercase; }
@@ -338,14 +340,27 @@
   }
   .pain-value {
     font-family: 'Fraunces', serif;
-    font-size: 32px; min-width: 44px; text-align: center;
+    font-size: 32px; min-width: 48px; text-align: center;
     color: var(--coral); font-weight: 500;
     transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    font-variant-numeric: tabular-nums;
+    display: inline-block;
   }
   .pain-value.pulse { transform: scale(1.18); }
 
-  .clock-comparison { display: flex; gap: 48px; align-items: center; flex-wrap: wrap; justify-content: center; }
-  .clock-block { text-align: center; }
+  .clock-comparison {
+    display: grid;
+    grid-template-columns: 180px 180px 180px;
+    column-gap: 32px;
+    align-items: center;
+    justify-content: center;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+  @media (max-width: 600px) {
+    .clock-comparison { grid-template-columns: 1fr; column-gap: 0; row-gap: 20px; justify-items: center; }
+  }
+  .clock-block { text-align: center; width: 180px; }
   .clock-face {
     width: 124px; height: 124px; border-radius: 50%;
     border: 3px solid currentColor;
@@ -362,7 +377,8 @@
     position: absolute; bottom: 50%; left: 50%;
     transform-origin: bottom center;
     border-radius: 2px;
-    transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+    will-change: transform;
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
   }
   .clock-hand.hour { width: 4px; height: 36px; margin-left: -2px; background: currentColor; }
   .clock-hand.minute { width: 3px; height: 48px; margin-left: -1.5px; background: currentColor; opacity: 0.65; }
@@ -371,6 +387,9 @@
     font-family: 'Fraunces', serif;
     font-size: 30px; font-weight: 500;
     transition: color 0.4s; letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+    min-width: 96px;
+    display: inline-block;
   }
   .clock-time.male { color: var(--blue); }
   .clock-time.female { color: var(--coral); }
@@ -378,16 +397,21 @@
 
   .gap-display {
     display: flex; flex-direction: column; justify-content: center; align-items: center;
-    padding: 0 12px;
+    padding: 0 8px;
+    width: 180px;
   }
   .gap-label { font-size: 10px; color: var(--ink-light); margin-bottom: 6px; letter-spacing: 0.2em; text-transform: uppercase; }
   .gap-value {
     font-family: 'Fraunces', serif;
     font-size: 44px; color: var(--coral); font-weight: 500;
-    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: color 0.35s ease, transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
     letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+    min-width: 120px;
+    text-align: center;
+    display: inline-block;
   }
-  .gap-sub { font-size: 12px; color: var(--ink-light); margin-top: 4px; font-style: italic; }
+  .gap-sub { font-size: 12px; color: var(--ink-light); margin-top: 4px; font-style: italic; text-align: center; }
 
   .quiz-reveal {
     margin-top: 36px; padding-top: 28px;
@@ -399,12 +423,18 @@
 
   /* HEATMAP */
   .heatmap-section { background: var(--sand); }
-  .heatmap-wrapper { margin-top: 56px; overflow-x: auto; padding: 4px; }
+  .heatmap-wrapper {
+    margin: 56px auto 0;
+    padding: 24px 4px 4px;
+    overflow: visible;
+    max-width: 880px;
+  }
+  .heatmap-section .hm-legend { justify-content: center; }
   .heatmap-grid {
     display: grid;
-    grid-template-columns: 140px repeat(5, 1fr);
+    grid-template-columns: 120px repeat(5, minmax(0, 1fr));
     gap: 6px;
-    min-width: 560px;
+    width: 100%;
   }
   .hm-header {
     font-size: 11px; font-weight: 500; letter-spacing: 0.08em;
@@ -416,11 +446,12 @@
     display: flex; align-items: center; padding-right: 12px;
   }
   .hm-cell {
-    aspect-ratio: 1.4;
+    aspect-ratio: 1.5;
+    max-height: 86px;
     border-radius: 10px;
     display: flex; align-items: center; justify-content: center;
     font-family: 'Fraunces', serif;
-    font-size: 20px; font-weight: 500;
+    font-size: 18px; font-weight: 500;
     cursor: default;
     transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
     position: relative;
@@ -439,7 +470,7 @@
     font-family: 'Inter', sans-serif;
     font-size: 12px; font-weight: 400;
     padding: 8px 12px; border-radius: 8px;
-    white-space: nowrap; z-index: 10;
+    white-space: nowrap; z-index: 50;
     transition: opacity 0.25s, transform 0.25s;
     box-shadow: 0 8px 24px rgba(0,0,0,0.18);
   }
@@ -475,14 +506,15 @@
     flex-wrap: wrap; gap: 32px; margin-bottom: 48px;
   }
   .bf-headline { font-family: 'Fraunces', serif; font-size: 24px; line-height: 1.35; max-width: 420px; font-weight: 500; letter-spacing: -0.01em; }
-  .bf-headline em { color: var(--coral); font-style: italic; font-weight: 400; }
+  .bf-headline em { color: var(--coral); font-style: italic; font-weight: 400; font-variant-numeric: tabular-nums; }
   .bf-year-panel { display: flex; flex-direction: column; align-items: center; gap: 6px; }
   .bf-year-num {
     font-family: 'Fraunces', serif;
     font-size: 64px; font-weight: 500; line-height: 1;
-    transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: color 0.35s ease, transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
     letter-spacing: -0.03em;
     color: var(--ink);
+    font-variant-numeric: tabular-nums;
   }
   .bf-year-hint { font-size: 11px; color: var(--ink-light); font-weight: 400; letter-spacing: 0.14em; margin-top: 4px; text-transform: uppercase; }
   .bf-year-slider-row { display: flex; align-items: center; gap: 12px; margin-top: 10px; }
@@ -494,8 +526,11 @@
   .bf-clock-mins {
     font-family: 'Fraunces', serif;
     font-size: 34px; font-weight: 500; line-height: 1;
-    transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: color 0.4s ease;
     letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+    min-width: 110px;
+    display: inline-block;
   }
   .bf-clock-mins.male { color: var(--blue); }
   .bf-clock-mins.female { color: var(--coral); }
@@ -523,9 +558,10 @@
     border-radius: 4px 0 0 4px;
     display: flex; align-items: center; justify-content: flex-end;
     padding-right: 7px;
-    transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1); overflow: hidden;
+    transition: width 0.45s cubic-bezier(0.22, 1, 0.36, 1); overflow: hidden;
+    will-change: width;
   }
-  .bf-bar-val { font-size: 11px; font-weight: 500; color: rgba(255,255,255,0.95); white-space: nowrap; letter-spacing: 0.02em; }
+  .bf-bar-val { font-size: 11px; font-weight: 500; color: rgba(255,255,255,0.95); white-space: nowrap; letter-spacing: 0.02em; font-variant-numeric: tabular-nums; }
   .bf-pain-lbl {
     width: 48px; text-align: center;
     font-family: 'Fraunces', serif;
@@ -538,7 +574,8 @@
     height: 24px; background: linear-gradient(to right, var(--coral-soft), var(--coral));
     border-radius: 0 4px 4px 0;
     display: flex; align-items: center; padding-left: 7px;
-    transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1); overflow: hidden;
+    transition: width 0.45s cubic-bezier(0.22, 1, 0.36, 1); overflow: hidden;
+    will-change: width;
   }
   .bf-note {
     margin-top: 32px; padding-top: 24px; border-top: 0.5px solid var(--line);
@@ -593,10 +630,11 @@
     display: flex; gap: 18px; align-items: flex-start;
     margin-bottom: 18px; padding-bottom: 18px;
     border-bottom: 0.5px solid var(--line);
-    transition: padding 0.25s ease;
+    transition: transform 0.25s ease;
   }
-  .impact-row:hover { padding-left: 4px; }
+  .impact-row:hover { transform: translateX(4px); }
   .impact-row:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+  .impact-text { word-spacing: normal; }
   .impact-dot {
     width: 12px; height: 12px; border-radius: 50%;
     background: var(--coral); flex-shrink: 0; margin-top: 7px;
@@ -637,27 +675,32 @@
   }
   .ix-pain-btn:hover:not(.active) { background: var(--paper); border-color: var(--ink); transform: translateY(-1px); }
 
-  .ix-controls-row { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px; margin-bottom: 32px; }
+  .ix-controls-row { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px; margin: 0 auto 32px; max-width: 720px; }
+  .intersect-section .ix-view-label,
+  .intersect-section .ix-legends,
+  .intersect-section .ix-callout,
+  .intersect-section .ix-source-note { max-width: 720px; margin-left: auto; margin-right: auto; }
+  .intersect-section .ix-legends { justify-content: center; }
   .ix-toggle-wrap { display: flex; border: 0.5px solid var(--line-strong); border-radius: 999px; overflow: hidden; flex-shrink: 0; background: var(--paper); }
   .ix-toggle-btn { font-size: 12px; padding: 8px 18px; cursor: pointer; background: transparent; color: var(--ink-mid); border: none; transition: all 0.25s; white-space: nowrap; font-family: 'Inter', sans-serif; font-weight: 500; }
   .ix-toggle-btn.active { background: var(--ink); color: var(--paper); }
   .ix-view-label { font-size: 13px; color: var(--ink-light); margin-bottom: 18px; font-style: italic; font-weight: 400; }
-  .ix-grid-wrap { overflow-x: auto; padding: 4px; }
-  .ix-grid { display: grid; grid-template-columns: 80px repeat(4, 1fr); gap: 6px; min-width: 440px; }
+  .ix-grid-wrap { overflow: visible; padding: 24px 4px 4px; max-width: 720px; margin: 0 auto; }
+  .ix-grid { display: grid; grid-template-columns: 80px repeat(4, minmax(0, 1fr)); gap: 6px; width: 100%; }
   .ix-col-head { font-size: 11px; color: var(--ink-light); font-weight: 500; text-align: center; padding: 6px 2px 12px; letter-spacing: 0.06em; text-transform: uppercase; }
   .ix-row-head { font-size: 14px; color: var(--ink); font-weight: 500; display: flex; align-items: center; padding-right: 12px; justify-content: flex-end; }
   .ix-cell {
-    aspect-ratio: 1.4; border-radius: 10px;
+    aspect-ratio: 1.5; max-height: 84px; border-radius: 10px;
     display: flex; align-items: center; justify-content: center;
     font-family: 'Fraunces', serif;
-    font-size: 17px; font-weight: 500;
+    font-size: 16px; font-weight: 500;
     cursor: default; position: relative;
     transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
     letter-spacing: -0.02em;
   }
   .ix-cell:hover { transform: scale(1.08) translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.15); z-index: 2; }
   .ix-cell:hover .ix-tip { opacity: 1; transform: translateX(-50%) translateY(0); }
-  .ix-tip { opacity: 0; pointer-events: none; position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%) translateY(6px); background: var(--ink); color: var(--paper); font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 400; padding: 6px 10px; border-radius: 6px; white-space: nowrap; z-index: 10; transition: all 0.25s; }
+  .ix-tip { opacity: 0; pointer-events: none; position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%) translateY(6px); background: var(--ink); color: var(--paper); font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 400; padding: 6px 10px; border-radius: 6px; white-space: nowrap; z-index: 50; transition: all 0.25s; }
   .ix-row-divider { grid-column: 1 / -1; height: 4px; }
   .ix-legends { display: flex; gap: 32px; margin-top: 20px; flex-wrap: wrap; }
   .ix-legend { display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--ink-light); }
@@ -698,7 +741,49 @@
   .takeaway-card p { font-size: 14px; font-weight: 300; color: rgba(255,255,255,0.6); line-height: 1.65; }
   .takeaway-note { margin-top: 72px; padding-top: 44px; border-top: 0.5px solid rgba(255,255,255,0.12); font-size: 14px; color: rgba(255,255,255,0.35); font-weight: 300; max-width: 680px; line-height: 1.75; }
 
-  footer { padding: 48px 8vw; background: #0A0907; font-size: 12px; color: rgba(255,255,255,0.3); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px; font-weight: 400; letter-spacing: 0.06em; }
+  footer {
+    padding: 48px 8vw;
+    background: #0A0907;
+    font-size: 12px;
+    color: rgba(255,255,255,0.3);
+    display: flex; flex-direction: column; gap: 28px;
+    font-weight: 400; letter-spacing: 0.06em;
+  }
+  .footer-meta { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+  .footer-credits {
+    padding-top: 24px;
+    border-top: 0.5px solid rgba(255,255,255,0.10);
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 24px; align-items: flex-start;
+  }
+  .footer-credits-label {
+    font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: rgba(255,255,255,0.4); margin-bottom: 10px; font-weight: 500;
+  }
+  .footer-authors { display: flex; flex-direction: column; gap: 4px; }
+  .footer-authors li { font-size: 13px; color: rgba(255,255,255,0.55); list-style: none; font-weight: 400; letter-spacing: 0.02em; }
+  .footer-authors li .author-id { color: rgba(255,255,255,0.32); font-variant-numeric: tabular-nums; margin-left: 6px; }
+  .footer-course { text-align: right; }
+  .footer-repo-link {
+    display: inline-flex; align-items: center; gap: 8px;
+    color: rgba(255,255,255,0.7);
+    text-decoration: none;
+    font-size: 13px; letter-spacing: 0.02em;
+    padding: 8px 14px; border-radius: 999px;
+    border: 0.5px solid rgba(255,255,255,0.14);
+    background: rgba(255,255,255,0.02);
+    transition: color 0.25s ease, border-color 0.25s ease, background 0.25s ease, transform 0.25s ease;
+  }
+  .footer-repo-link:hover {
+    color: var(--paper);
+    border-color: rgba(255,255,255,0.32);
+    background: rgba(255,255,255,0.05);
+    transform: translateY(-1px);
+  }
+  .footer-repo-link svg { width: 16px; height: 16px; }
+  @media (max-width: 600px) {
+    .footer-credits { flex-direction: column; }
+    .footer-course { text-align: left; }
+  }
 
   /* fade-in animations */
   .fade-in { opacity: 0; transform: translateY(36px); transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1); }
@@ -1057,8 +1142,35 @@
 </section>
 
 <footer>
-  <span>The Wait Gap · NHAMCS Analysis · 2009–2022</span>
-  <span>Data: CDC National Center for Health Statistics</span>
+  <div class="footer-meta">
+    <span>The Wait Gap · NHAMCS Analysis · 2009–2022</span>
+    <span>Data: CDC National Center for Health Statistics</span>
+  </div>
+  <div class="footer-credits">
+    <div>
+      <div class="footer-credits-label">Group 76 · Authors</div>
+      <ul class="footer-authors">
+        <li>Aryan Mirzazadeh <span class="author-id">s204489</span></li>
+        <li>Trinity Sara McConnachie Evans <span class="author-id">s252753</span></li>
+        <li>Vladyslav Horbatenko <span class="author-id">s254355</span></li>
+      </ul>
+    </div>
+    <div class="footer-course">
+      <div class="footer-credits-label">Source code</div>
+      <a class="footer-repo-link"
+         href="https://github.com/Aryan-Mi/dtu-social-data-assignments"
+         target="_blank" rel="noopener noreferrer"
+         aria-label="View the project source on GitHub">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55v-1.92c-3.2.7-3.87-1.54-3.87-1.54-.52-1.33-1.27-1.69-1.27-1.69-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.02 1.75 2.68 1.25 3.34.96.1-.74.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.18-3.1-.12-.29-.51-1.45.11-3.02 0 0 .96-.31 3.15 1.18.91-.25 1.89-.38 2.86-.38.97 0 1.95.13 2.86.38 2.19-1.49 3.15-1.18 3.15-1.18.62 1.57.23 2.73.11 3.02.73.81 1.18 1.84 1.18 3.1 0 4.42-2.7 5.39-5.27 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.55C20.21 21.38 23.5 17.07 23.5 12 23.5 5.65 18.35.5 12 .5z"/>
+        </svg>
+        github.com/Aryan-Mi/dtu-social-data-assignments
+      </a>
+      <div style="margin-top:14px; font-size:11px; color:rgba(255,255,255,0.28); letter-spacing:0.06em;">
+        02806 Social Data Analysis &amp; Visualization · DTU · Spring 2026
+      </div>
+    </div>
+  </div>
 </footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
@@ -1091,24 +1203,69 @@ sections.forEach(s => navObs.observe(s));
 const painData = { 0:{m:20,g:0}, 1:{m:20,g:2}, 2:{m:20,g:1}, 3:{m:20,g:1}, 4:{m:20,g:2}, 5:{m:20,g:2}, 6:{m:21,g:1}, 7:{m:21,g:2}, 8:{m:21,g:2}, 9:{m:21,g:2}, 10:{m:21,g:2} };
 function rot(m){return (m/60)*360;} function hr(m){return (m/60)*30;}
 const painValEl = document.getElementById('painVal');
+const mTimeEl  = document.getElementById('mTime');
+const fTimeEl  = document.getElementById('fTime');
+const gapValEl = document.getElementById('gapVal');
+const mMinuteEl = document.getElementById('mMinute');
+const mHourEl   = document.getElementById('mHour');
+const fMinuteEl = document.getElementById('fMinute');
+const fHourEl   = document.getElementById('fHour');
+const revealPainEl = document.getElementById('revealPain');
+const revealGapEl  = document.getElementById('revealGap');
+
+let clockTweenRAF = null;
+const clockState = { m: 20, f: 22 }; // current displayed (interpolated) values
+
+function setClockHands(mVal, fVal) {
+  mMinuteEl.style.transform = 'rotate(' + rot(mVal) + 'deg)';
+  mHourEl.style.transform   = 'rotate(' + hr(mVal)  + 'deg)';
+  fMinuteEl.style.transform = 'rotate(' + rot(fVal) + 'deg)';
+  fHourEl.style.transform   = 'rotate(' + hr(fVal)  + 'deg)';
+}
+
+function tweenClock(targetM, targetF, duration = 450) {
+  if (clockTweenRAF) cancelAnimationFrame(clockTweenRAF);
+  const startM = clockState.m, startF = clockState.f;
+  const t0 = performance.now();
+  function step(now) {
+    const p = Math.min((now - t0) / duration, 1);
+    const ease = 1 - Math.pow(1 - p, 3); // easeOutCubic
+    const m = startM + (targetM - startM) * ease;
+    const f = startF + (targetF - startF) * ease;
+    clockState.m = m; clockState.f = f;
+    setClockHands(m, f);
+    mTimeEl.textContent = Math.round(m) + ' min';
+    fTimeEl.textContent = Math.round(f) + ' min';
+    if (p < 1) {
+      clockTweenRAF = requestAnimationFrame(step);
+    } else {
+      clockTweenRAF = null;
+    }
+  }
+  clockTweenRAF = requestAnimationFrame(step);
+}
+
 function updateSlider(val) {
   const d = painData[val];
   const fTime = d.m + d.g;
   painValEl.textContent = val;
+  painValEl.classList.remove('pulse');
+  // force reflow so animation re-triggers
+  void painValEl.offsetWidth;
   painValEl.classList.add('pulse');
-  setTimeout(() => painValEl.classList.remove('pulse'), 280);
-  document.getElementById('mTime').textContent = d.m + ' min';
-  document.getElementById('fTime').textContent = fTime + ' min';
-  document.getElementById('gapVal').textContent = '+' + d.g + ' min';
-  document.getElementById('revealPain').textContent = val;
-  document.getElementById('revealGap').textContent = '+' + d.g + ' minute' + (d.g !== 1 ? 's' : '');
-  document.getElementById('mMinute').style.transform = 'rotate(' + rot(d.m) + 'deg)';
-  document.getElementById('mHour').style.transform = 'rotate(' + hr(d.m) + 'deg)';
-  document.getElementById('fMinute').style.transform = 'rotate(' + rot(fTime) + 'deg)';
-  document.getElementById('fHour').style.transform = 'rotate(' + hr(fTime) + 'deg)';
+  gapValEl.textContent = '+' + d.g + ' min';
+  revealPainEl.textContent = val;
+  revealGapEl.textContent  = '+' + d.g + ' minute' + (d.g !== 1 ? 's' : '');
+  tweenClock(d.m, fTime, 420);
 }
 const slider = document.getElementById('painSlider');
 slider.addEventListener('input', () => updateSlider(parseInt(slider.value)));
+// initialise displayed state immediately
+clockState.m = painData[5].m;
+clockState.f = painData[5].m + painData[5].g;
+setClockHands(clockState.m, clockState.f);
+mTimeEl.textContent = clockState.m + ' min';
+fTimeEl.textContent = clockState.f + ' min';
 updateSlider(5);
 
 /* heatmap */
@@ -1229,21 +1386,89 @@ const BF_MED = {
   male:   [31,26,25,21,23,20,18,16,16,15,15,10,14,14]
 };
 
-function renderButterfly(idx) {
-  const d = BF_DATA[BF_YEARS[idx]];
-  const data = d.male.map((m,p) => ({pain:p, male:m, female:d.female[p]}));
-  document.getElementById('bfYearDisplay').textContent = BF_YEARS[idx];
-  document.getElementById('bfYearInline').textContent = BF_YEARS[idx];
-  document.getElementById('bfGapText').textContent = '+' + (data[10].female-data[10].male).toFixed(1) + ' min';
-  document.getElementById('bfMaleAvg').textContent = BF_MED.male[idx].toFixed(1) + ' min';
-  document.getElementById('bfFemaleAvg').textContent = BF_MED.female[idx].toFixed(1) + ' min';
-  const bars = document.getElementById('bfBars');
-  bars.innerHTML = data.map(d => {
-    const mW = (d.male/BF_SCALE*100).toFixed(1);
-    const fW = (d.female/BF_SCALE*100).toFixed(1);
-    return `<div class="bf-row"><div class="bf-male-side"><div class="bf-bar-m" style="width:${mW}%"><span class="bf-bar-val">${d.male}</span></div></div><div class="bf-pain-lbl">${d.pain}</div><div class="bf-bar-f" style="width:${fW}%"><span class="bf-bar-val">${d.female}</span></div></div>`;
-  }).join('');
+/* build the bf-bars DOM once, then update widths/values in place for smooth transitions */
+const bfBarsEl = document.getElementById('bfBars');
+const bfYearDisplay = document.getElementById('bfYearDisplay');
+const bfYearInline  = document.getElementById('bfYearInline');
+const bfGapText     = document.getElementById('bfGapText');
+const bfMaleAvgEl   = document.getElementById('bfMaleAvg');
+const bfFemaleAvgEl = document.getElementById('bfFemaleAvg');
+
+function buildBfRows() {
+  bfBarsEl.innerHTML = BF_DATA[BF_YEARS[0]].male.map((_, p) => `
+    <div class="bf-row">
+      <div class="bf-male-side">
+        <div class="bf-bar-m" data-pain="${p}" style="width:0%"><span class="bf-bar-val">0</span></div>
+      </div>
+      <div class="bf-pain-lbl">${p}</div>
+      <div class="bf-bar-f" data-pain="${p}" style="width:0%"><span class="bf-bar-val">0</span></div>
+    </div>`).join('');
 }
+buildBfRows();
+const bfMaleBars   = Array.from(bfBarsEl.querySelectorAll('.bf-bar-m'));
+const bfFemaleBars = Array.from(bfBarsEl.querySelectorAll('.bf-bar-f'));
+
+let bfState = { idx: -1, male: null, female: null, mAvg: 0, fAvg: 0, gap: 0 };
+let bfTweenRAF = null;
+
+function applyBfFrame(maleArr, femaleArr, mAvg, fAvg, gap) {
+  for (let p = 0; p < maleArr.length; p++) {
+    const mW = (maleArr[p]   / BF_SCALE * 100).toFixed(2);
+    const fW = (femaleArr[p] / BF_SCALE * 100).toFixed(2);
+    const mBar = bfMaleBars[p],   fBar = bfFemaleBars[p];
+    mBar.style.width = mW + '%';
+    fBar.style.width = fW + '%';
+    mBar.firstElementChild.textContent = maleArr[p].toFixed(1);
+    fBar.firstElementChild.textContent = femaleArr[p].toFixed(1);
+  }
+  bfMaleAvgEl.textContent   = mAvg.toFixed(1) + ' min';
+  bfFemaleAvgEl.textContent = fAvg.toFixed(1) + ' min';
+  bfGapText.textContent     = (gap >= 0 ? '+' : '') + gap.toFixed(1) + ' min';
+}
+
+function tweenButterfly(targetIdx, duration = 420) {
+  const tgtYear = BF_YEARS[targetIdx];
+  const tgt = BF_DATA[tgtYear];
+  const tgtMale = tgt.male.slice(), tgtFemale = tgt.female.slice();
+  const tgtMAvg = BF_MED.male[targetIdx], tgtFAvg = BF_MED.female[targetIdx];
+  const tgtGap = tgtFemale[10] - tgtMale[10];
+
+  bfYearDisplay.textContent = tgtYear;
+  bfYearInline.textContent  = tgtYear;
+
+  // first-time render: snap (no tween from nulls)
+  if (!bfState.male) {
+    bfState = { idx: targetIdx, male: tgtMale, female: tgtFemale, mAvg: tgtMAvg, fAvg: tgtFAvg, gap: tgtGap };
+    applyBfFrame(tgtMale, tgtFemale, tgtMAvg, tgtFAvg, tgtGap);
+    return;
+  }
+
+  if (bfTweenRAF) cancelAnimationFrame(bfTweenRAF);
+  const startMale = bfState.male.slice();
+  const startFemale = bfState.female.slice();
+  const startMAvg = bfState.mAvg, startFAvg = bfState.fAvg, startGap = bfState.gap;
+  const t0 = performance.now();
+
+  function step(now) {
+    const p = Math.min((now - t0) / duration, 1);
+    const ease = 1 - Math.pow(1 - p, 3);
+    const curMale = startMale.map((v, i) => v + (tgtMale[i] - v) * ease);
+    const curFemale = startFemale.map((v, i) => v + (tgtFemale[i] - v) * ease);
+    const curMAvg = startMAvg + (tgtMAvg - startMAvg) * ease;
+    const curFAvg = startFAvg + (tgtFAvg - startFAvg) * ease;
+    const curGap  = startGap  + (tgtGap  - startGap)  * ease;
+    applyBfFrame(curMale, curFemale, curMAvg, curFAvg, curGap);
+    if (p < 1) {
+      bfTweenRAF = requestAnimationFrame(step);
+    } else {
+      bfState = { idx: targetIdx, male: tgtMale, female: tgtFemale, mAvg: tgtMAvg, fAvg: tgtFAvg, gap: tgtGap };
+      bfTweenRAF = null;
+    }
+  }
+  bfTweenRAF = requestAnimationFrame(step);
+}
+
+function renderButterfly(idx) { tweenButterfly(idx); }
 const bfSlider = document.getElementById('bfYearSlider');
 bfSlider.addEventListener('input', () => renderButterfly(parseInt(bfSlider.value)));
 renderButterfly(0);

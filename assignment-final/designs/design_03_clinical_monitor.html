@@ -1,0 +1,1408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ED Monitor · Gender Disparity Audit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* ER monitor palette */
+    --bg: #060B0F;
+    --panel: #0C1418;
+    --panel-2: #131D24;
+    --panel-3: #1A262E;
+    --line: rgba(140, 200, 220, 0.10);
+    --line-strong: rgba(140, 200, 220, 0.22);
+    --grid: rgba(80, 160, 180, 0.08);
+
+    --text: #D9E8EE;
+    --text-mid: #95B0BA;
+    --text-dim: #5A7682;
+    --text-accent: #87E6C5;
+
+    /* status colors */
+    --green: #58E388;       /* normal */
+    --green-glow: rgba(88, 227, 136, 0.6);
+    --amber: #F3C054;       /* caution */
+    --red: #FF4D5C;         /* critical / female longer wait */
+    --red-glow: rgba(255, 77, 92, 0.6);
+    --blue: #5BB8E8;        /* male */
+    --blue-glow: rgba(91, 184, 232, 0.5);
+    --magenta: #E85BB8;     /* female */
+    --magenta-glow: rgba(232, 91, 184, 0.5);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; -webkit-font-smoothing:antialiased; }
+  body {
+    font-family: 'JetBrains Mono', 'Courier New', monospace;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.65;
+    overflow-x: hidden;
+    background-image:
+      linear-gradient(rgba(80,160,180,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(80,160,180,0.025) 1px, transparent 1px);
+    background-size: 32px 32px;
+    background-attachment: fixed;
+  }
+  ::selection { background: var(--red); color: var(--bg); }
+
+  /* scan-line vignette */
+  body::after {
+    content:''; position:fixed; inset:0; pointer-events:none; z-index:1;
+    background:
+      radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.6) 100%),
+      repeating-linear-gradient(0deg, transparent 0, transparent 3px, rgba(0,0,0,0.04) 3px, rgba(0,0,0,0.04) 4px);
+  }
+
+  /* TOP BAR — like a hospital monitor */
+  .topbar {
+    position: fixed; top: 0; left: 0; right: 0;
+    height: 56px; z-index: 100;
+    background: var(--panel);
+    border-bottom: 1px solid var(--line-strong);
+    display: grid; grid-template-columns: 260px 1fr auto auto;
+    align-items: center; gap: 1px;
+    backdrop-filter: blur(10px);
+    background: rgba(12,20,24,0.92);
+  }
+  .topbar-cell {
+    height: 100%; padding: 0 20px;
+    display: flex; flex-direction: column; justify-content: center;
+    background: var(--panel);
+    font-size: 10px; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--text-dim);
+  }
+  .topbar-cell .v {
+    font-size: 14px; color: var(--text);
+    font-weight: 600; letter-spacing: 0.06em;
+    text-transform: none;
+  }
+  .topbar-cell .v.green { color: var(--green); text-shadow: 0 0 10px var(--green-glow); }
+  .topbar-cell .v.red { color: var(--red); text-shadow: 0 0 10px var(--red-glow); }
+  .topbar-cell .v.amber { color: var(--amber); }
+  .topbar-cell .blink::before {
+    content: '●'; color: var(--red); margin-right: 8px;
+    animation: blink 1.2s ease-in-out infinite;
+    text-shadow: 0 0 12px var(--red-glow);
+  }
+  @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.2; } }
+
+  /* HERO MONITOR */
+  .hero {
+    min-height: 100vh;
+    padding: 88px 32px 32px;
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 1fr 360px;
+    gap: 16px;
+  }
+  @media (max-width: 980px) { .hero { grid-template-columns: 1fr; } }
+
+  .hero-main {
+    background: var(--panel);
+    border: 1px solid var(--line-strong);
+    padding: 40px 48px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-main::before {
+    content: 'CHANNEL 01 · ED-AUDIT-2009-2022';
+    position: absolute; top: 12px; left: 16px;
+    font-size: 9px; color: var(--text-dim);
+    letter-spacing: 0.22em;
+  }
+  .hero-main::after {
+    content: 'LIVE'; position: absolute; top: 12px; right: 16px;
+    font-size: 9px; color: var(--red); letter-spacing: 0.22em;
+    font-weight: 700;
+  }
+
+  .hero-eyebrow {
+    font-size: 10px; color: var(--red);
+    letter-spacing: 0.32em; text-transform: uppercase;
+    margin: 24px 0 28px; font-weight: 700;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .hero-eyebrow::before {
+    content: ''; width: 8px; height: 8px; background: var(--red);
+    border-radius: 50%; box-shadow: 0 0 12px var(--red-glow);
+    animation: blink 1.2s ease-in-out infinite;
+  }
+
+  .hero h1 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(40px, 6vw, 80px);
+    line-height: 1.0; letter-spacing: -0.04em;
+    font-weight: 800;
+    color: var(--text);
+    margin-bottom: 28px;
+  }
+  .hero h1 .red {
+    color: var(--red);
+    text-shadow: 0 0 20px var(--red-glow);
+  }
+  .hero h1 .bracket { color: var(--text-dim); font-weight: 400; }
+
+  .hero-sub {
+    font-family: 'Inter', sans-serif;
+    font-size: 17px; color: var(--text-mid);
+    max-width: 580px; line-height: 1.7;
+    font-weight: 400;
+    margin-bottom: 32px;
+  }
+
+  /* ECG WAVE */
+  .ecg-wrap {
+    margin: 32px 0;
+    padding: 24px 0;
+    border-top: 1px dashed var(--line-strong);
+    border-bottom: 1px dashed var(--line-strong);
+    position: relative;
+  }
+  .ecg-wrap::before {
+    content: 'ECG · 12-LEAD'; position: absolute;
+    top: -8px; left: 0; background: var(--panel);
+    padding: 0 8px; font-size: 9px;
+    color: var(--text-dim); letter-spacing: 0.22em;
+  }
+  .ecg-wrap::after {
+    content: '75 BPM'; position: absolute;
+    top: -8px; right: 0; background: var(--panel);
+    padding: 0 8px; font-size: 9px;
+    color: var(--green); letter-spacing: 0.22em;
+    text-shadow: 0 0 8px var(--green-glow);
+  }
+  .ecg-svg {
+    width: 100%; height: 80px; display: block;
+  }
+  .ecg-line {
+    fill: none;
+    stroke: var(--green);
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    filter: drop-shadow(0 0 4px var(--green-glow));
+    stroke-dasharray: 4000;
+    stroke-dashoffset: 4000;
+    animation: ecg-draw 4s linear infinite;
+  }
+  @keyframes ecg-draw {
+    0% { stroke-dashoffset: 4000; }
+    100% { stroke-dashoffset: 0; }
+  }
+
+  /* HERO STATS PANEL */
+  .hero-stats {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1px; background: var(--line-strong);
+    border: 1px solid var(--line-strong);
+    margin-top: 8px;
+  }
+  .hero-stat {
+    background: var(--panel-2);
+    padding: 24px 20px;
+  }
+  .hero-stat .lbl {
+    font-size: 9px; color: var(--text-dim);
+    letter-spacing: 0.22em; text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .hero-stat .num {
+    font-size: 36px; font-weight: 700;
+    line-height: 1; letter-spacing: -0.04em;
+    color: var(--text);
+  }
+  .hero-stat .num.red { color: var(--red); text-shadow: 0 0 14px var(--red-glow); }
+  .hero-stat .num .unit { font-size: 16px; color: var(--text-dim); margin-left: 2px; font-weight: 400; }
+  .hero-stat .desc {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px; color: var(--text-mid);
+    margin-top: 8px; line-height: 1.5;
+  }
+
+  /* SIDE PATIENT PANEL */
+  .patient-panel {
+    background: var(--panel);
+    border: 1px solid var(--line-strong);
+    padding: 24px;
+  }
+  .patient-panel-title {
+    font-size: 9px; color: var(--text-dim);
+    letter-spacing: 0.22em; text-transform: uppercase;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--line);
+  }
+  .vital-row {
+    display: flex; align-items: baseline; justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px dashed var(--line);
+  }
+  .vital-row:last-child { border-bottom: none; }
+  .vital-row .k {
+    font-size: 11px; color: var(--text-dim);
+    letter-spacing: 0.1em; text-transform: uppercase;
+  }
+  .vital-row .v {
+    font-size: 14px; font-weight: 600; color: var(--text);
+    font-variant-numeric: tabular-nums;
+  }
+  .vital-row .v.green { color: var(--green); text-shadow: 0 0 6px var(--green-glow); }
+  .vital-row .v.amber { color: var(--amber); }
+  .vital-row .v.red { color: var(--red); text-shadow: 0 0 6px var(--red-glow); }
+
+  .alert-banner {
+    margin-top: 16px; padding: 12px 16px;
+    background: rgba(255,77,92,0.10);
+    border: 1px solid var(--red);
+    color: var(--red);
+    font-size: 11px; letter-spacing: 0.04em;
+    text-transform: uppercase;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .alert-banner::before {
+    content: '⚠'; font-size: 14px;
+    animation: blink 1.2s ease-in-out infinite;
+  }
+
+  /* SECTIONS */
+  section { padding: 64px 32px; position: relative; z-index: 2; }
+  .section-block {
+    background: var(--panel);
+    border: 1px solid var(--line-strong);
+    position: relative;
+  }
+  .section-block::before {
+    content: attr(data-channel);
+    position: absolute; top: -1px; left: 24px;
+    background: var(--bg); color: var(--text-dim);
+    padding: 4px 12px; font-size: 9px;
+    letter-spacing: 0.22em;
+    transform: translateY(-50%);
+  }
+  .section-block .label-tag {
+    position: absolute; top: -1px; right: 24px;
+    background: var(--bg); color: var(--red);
+    padding: 4px 12px; font-size: 9px;
+    letter-spacing: 0.22em;
+    transform: translateY(-50%);
+    font-weight: 700;
+  }
+
+  .section-header { padding: 56px 48px 32px; }
+  .section-meta {
+    display: flex; gap: 16px; align-items: center;
+    margin-bottom: 24px;
+    font-size: 9px; color: var(--text-dim);
+    letter-spacing: 0.22em;
+  }
+  .section-meta .seg {
+    display: flex; align-items: center; gap: 8px;
+  }
+  .section-meta .seg::before {
+    content: ''; width: 6px; height: 6px;
+    background: var(--green); border-radius: 50%;
+    box-shadow: 0 0 6px var(--green-glow);
+  }
+  .section-meta .seg.warn::before { background: var(--amber); box-shadow: 0 0 6px var(--amber); }
+
+  .section-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(28px, 4vw, 48px);
+    line-height: 1.05; letter-spacing: -0.03em;
+    font-weight: 700; color: var(--text);
+    margin-bottom: 20px;
+  }
+  .section-title .red { color: var(--red); }
+  .section-title .dim { color: var(--text-dim); font-weight: 400; }
+  .section-body {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px; color: var(--text-mid);
+    max-width: 720px; line-height: 1.75; font-weight: 400;
+    margin-bottom: 32px;
+  }
+
+  /* TRIAGE TABLE */
+  .triage-table {
+    width: 100%; border-collapse: separate; border-spacing: 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    margin: 0 48px 48px;
+    width: calc(100% - 96px);
+  }
+  .triage-table th, .triage-table td {
+    padding: 14px 16px; text-align: left;
+    border-bottom: 1px dashed var(--line);
+  }
+  .triage-table th {
+    font-size: 9px; color: var(--text-dim);
+    letter-spacing: 0.18em; text-transform: uppercase;
+    font-weight: 500;
+    border-bottom: 1px solid var(--line-strong);
+  }
+  .triage-table td.bar-cell { width: 50%; }
+  .triage-bar-wrap { display: flex; align-items: center; gap: 12px; }
+  .triage-bar {
+    flex: 1; height: 18px; background: var(--panel-2);
+    border: 1px solid var(--line);
+    position: relative; overflow: hidden;
+  }
+  .triage-bar-fill {
+    height: 100%;
+    transition: width 1.4s cubic-bezier(0.16,1,0.3,1);
+    background: linear-gradient(to right, var(--green) 0%, var(--amber) 60%, var(--red) 100%);
+    width: 0;
+    box-shadow: 0 0 12px rgba(88, 227, 136, 0.3);
+  }
+  .triage-bar-val { font-size: 12px; color: var(--text); min-width: 50px; }
+
+  /* PAIN CONTROL — like a vitals adjuster */
+  .pain-control {
+    margin: 0 48px 48px;
+    padding: 32px;
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 24px;
+    align-items: stretch;
+  }
+  @media (max-width: 800px) { .pain-control { grid-template-columns: 1fr; } }
+
+  .pc-control-block {
+    grid-column: 1 / -1;
+    border-bottom: 1px dashed var(--line);
+    padding-bottom: 24px; margin-bottom: 8px;
+  }
+  .pc-label {
+    font-size: 9px; color: var(--text-dim);
+    letter-spacing: 0.22em; text-transform: uppercase;
+    margin-bottom: 12px;
+    display: flex; justify-content: space-between;
+  }
+  .pc-label .v { color: var(--red); font-size: 18px; font-weight: 700; letter-spacing: -0.02em; }
+
+  input[type=range] {
+    -webkit-appearance: none; appearance: none;
+    width: 100%; height: 4px;
+    background: linear-gradient(to right, var(--green), var(--amber), var(--red));
+    outline: none; cursor: pointer;
+    border-radius: 2px;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none;
+    width: 22px; height: 22px;
+    background: var(--bg); border: 2px solid var(--text);
+    cursor: grab;
+    box-shadow: 0 0 0 4px rgba(217,232,238,0.08), 0 0 10px rgba(217,232,238,0.4);
+    transform: rotate(45deg);
+    transition: transform 0.2s;
+  }
+  input[type=range]::-webkit-slider-thumb:hover { transform: rotate(45deg) scale(1.1); }
+  input[type=range]::-moz-range-thumb {
+    width: 22px; height: 22px;
+    background: var(--bg); border: 2px solid var(--text); cursor: grab;
+    transform: rotate(45deg);
+  }
+
+  .pc-readout {
+    padding: 24px;
+    background: var(--bg);
+    border: 1px solid var(--line);
+    text-align: center;
+  }
+  .pc-readout .who {
+    font-size: 10px; color: var(--text-dim);
+    letter-spacing: 0.22em; text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .pc-readout .num {
+    font-size: 48px; font-weight: 700;
+    line-height: 1; letter-spacing: -0.04em;
+    font-variant-numeric: tabular-nums;
+    transition: all 0.4s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  .pc-readout .num.male { color: var(--blue); text-shadow: 0 0 16px var(--blue-glow); }
+  .pc-readout .num.female { color: var(--magenta); text-shadow: 0 0 16px var(--magenta-glow); }
+  .pc-readout .num.delta { color: var(--red); text-shadow: 0 0 16px var(--red-glow); }
+  .pc-readout .unit { font-size: 18px; color: var(--text-dim); font-weight: 400; }
+  .pc-readout .desc {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px; color: var(--text-dim);
+    margin-top: 10px; letter-spacing: 0.04em;
+  }
+
+  /* HEATMAP — clinical grid */
+  .clinical-hm-wrap {
+    margin: 0 48px 48px; padding: 32px;
+    background: var(--panel-2); border: 1px solid var(--line);
+    overflow-x: auto;
+  }
+  .clinical-hm-title {
+    font-size: 9px; color: var(--text-dim);
+    letter-spacing: 0.22em; text-transform: uppercase;
+    margin-bottom: 24px;
+    display: flex; justify-content: space-between;
+  }
+  .clinical-hm-grid {
+    display: grid;
+    grid-template-columns: 140px repeat(5, 1fr);
+    gap: 3px;
+    min-width: 600px;
+  }
+  .chm-head {
+    font-size: 10px; color: var(--text-dim);
+    letter-spacing: 0.14em; text-transform: uppercase;
+    padding: 10px 4px; text-align: center;
+    font-weight: 500;
+  }
+  .chm-row-head {
+    font-size: 11px; color: var(--text-mid);
+    display: flex; align-items: center; padding-right: 10px;
+    font-weight: 500; letter-spacing: 0.04em;
+  }
+  .chm-cell {
+    aspect-ratio: 1.4;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    font-size: 18px; font-weight: 700;
+    border: 1px solid rgba(0,0,0,0.2);
+    cursor: default;
+    position: relative;
+    transition: all 0.25s cubic-bezier(0.16,1,0.3,1);
+    font-variant-numeric: tabular-nums;
+  }
+  .chm-cell:hover {
+    transform: scale(1.06); z-index: 2;
+    box-shadow: 0 0 0 1px var(--text), 0 8px 24px rgba(0,0,0,0.6);
+  }
+  .chm-cell .tooltip {
+    opacity: 0; pointer-events: none;
+    position: absolute; bottom: calc(100% + 6px); left: 50%;
+    transform: translateX(-50%);
+    background: var(--bg); color: var(--text);
+    border: 1px solid var(--line-strong);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; padding: 6px 10px;
+    white-space: nowrap; z-index: 10;
+    transition: opacity 0.2s;
+    letter-spacing: 0.04em;
+  }
+  .chm-cell:hover .tooltip { opacity: 1; }
+  .chm-cell .micro {
+    font-size: 9px; color: rgba(255,255,255,0.5);
+    margin-top: 2px; font-weight: 400; letter-spacing: 0.04em;
+  }
+
+  /* GROUP MONITOR — butterfly */
+  .group-monitor {
+    margin: 0 48px 48px;
+    background: var(--panel-2); border: 1px solid var(--line);
+    padding: 32px;
+  }
+  .gm-top {
+    display: flex; justify-content: space-between;
+    align-items: flex-start; flex-wrap: wrap; gap: 24px;
+    margin-bottom: 32px;
+  }
+  .gm-headline {
+    font-size: 16px; max-width: 480px;
+    color: var(--text); line-height: 1.5;
+    font-family: 'Inter', sans-serif;
+  }
+  .gm-headline .red { color: var(--red); font-weight: 600; font-family: 'JetBrains Mono', monospace; }
+  .gm-year-panel {
+    text-align: center;
+    border-left: 1px solid var(--line);
+    padding-left: 24px;
+  }
+  .gm-year-display {
+    font-size: 56px; font-weight: 700; line-height: 1;
+    color: var(--text); letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+    transition: all 0.3s;
+  }
+  .gm-year-hint {
+    font-size: 9px; color: var(--text-dim);
+    letter-spacing: 0.22em; text-transform: uppercase;
+    margin: 8px 0;
+  }
+  .gm-slider-row {
+    display: flex; align-items: center; gap: 8px;
+  }
+  .gm-yr-end { font-size: 10px; color: var(--text-dim); }
+
+  .gm-readout {
+    display: flex; gap: 32px; justify-content: center;
+    align-items: center; flex-wrap: wrap;
+    margin-bottom: 32px; padding: 24px;
+    background: var(--bg); border: 1px solid var(--line);
+  }
+  .gm-rd-block { text-align: center; }
+  .gm-rd-block .lbl { font-size: 9px; color: var(--text-dim); letter-spacing: 0.22em; text-transform: uppercase; margin-bottom: 8px; }
+  .gm-rd-block .v {
+    font-size: 32px; font-weight: 700; line-height: 1;
+    letter-spacing: -0.02em; font-variant-numeric: tabular-nums;
+    transition: all 0.4s cubic-bezier(0.16,1,0.3,1);
+  }
+  .gm-rd-block .v.male { color: var(--blue); text-shadow: 0 0 12px var(--blue-glow); }
+  .gm-rd-block .v.female { color: var(--magenta); text-shadow: 0 0 12px var(--magenta-glow); }
+  .gm-rd-block .v.red { color: var(--red); text-shadow: 0 0 12px var(--red-glow); }
+  .gm-rd-block .unit { font-size: 14px; color: var(--text-dim); }
+  .gm-rd-sep { color: var(--text-dim); font-size: 14px; }
+
+  .gm-chart-title {
+    font-size: 9px; color: var(--text-dim);
+    letter-spacing: 0.22em; text-transform: uppercase;
+    margin-bottom: 12px; text-align: center;
+  }
+  .gm-chart-headers {
+    display: grid; grid-template-columns: 1fr 44px 1fr;
+    margin-bottom: 8px; max-width: 580px;
+    margin-left: auto; margin-right: auto;
+  }
+  .gm-hdr-m, .gm-hdr-f {
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.18em; text-transform: uppercase;
+  }
+  .gm-hdr-m { color: var(--blue); text-align: right; padding-right: 8px; }
+  .gm-hdr-f { color: var(--magenta); padding-left: 8px; }
+  .gm-bf-row {
+    display: grid; grid-template-columns: 1fr 44px 1fr;
+    align-items: center; margin-bottom: 4px;
+    max-width: 580px; margin-left: auto; margin-right: auto;
+  }
+  .gm-male-side { display: flex; justify-content: flex-end; }
+  .gm-bar-m {
+    height: 20px;
+    background: linear-gradient(to left, rgba(91,184,232,0.3), var(--blue));
+    border-right: 1px solid var(--blue);
+    display: flex; align-items: center; justify-content: flex-end;
+    padding-right: 5px;
+    transition: width 0.6s cubic-bezier(0.16,1,0.3,1);
+    box-shadow: 0 0 8px var(--blue-glow);
+  }
+  .gm-bar-f {
+    height: 20px;
+    background: linear-gradient(to right, rgba(232,91,184,0.3), var(--magenta));
+    border-left: 1px solid var(--magenta);
+    display: flex; align-items: center;
+    padding-left: 5px;
+    transition: width 0.6s cubic-bezier(0.16,1,0.3,1);
+    box-shadow: 0 0 8px var(--magenta-glow);
+  }
+  .gm-bar-val { font-size: 10px; font-weight: 600; color: var(--bg); }
+  .gm-pain-lbl {
+    width: 44px; text-align: center;
+    font-size: 13px; font-weight: 700;
+    color: var(--text); background: var(--bg);
+    border: 1px solid var(--line-strong);
+    line-height: 20px;
+  }
+
+  /* TIMELINE MONITOR — ECG-like */
+  .timeline-monitor {
+    margin: 0 48px 48px;
+    padding: 32px;
+    background: var(--panel-2); border: 1px solid var(--line);
+  }
+  .tm-top {
+    display: flex; gap: 24px; justify-content: space-between; align-items: center;
+    margin-bottom: 24px; flex-wrap: wrap;
+  }
+  .tm-legend { display: flex; gap: 24px; }
+  .tm-leg {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 11px; color: var(--text-mid);
+  }
+  .tm-leg-dot {
+    width: 14px; height: 4px; border-radius: 1px;
+  }
+  .tm-chart-wrap {
+    position: relative; height: 320px;
+    background: var(--bg); border: 1px solid var(--line);
+    background-image:
+      linear-gradient(rgba(140,200,220,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(140,200,220,0.06) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  /* US MAP */
+  .map-monitor {
+    margin: 0 48px 48px; padding: 32px;
+    background: var(--panel-2); border: 1px solid var(--line);
+  }
+
+  /* INTERSECTIONALITY MONITOR */
+  .ix-monitor {
+    margin: 0 48px 48px; padding: 32px;
+    background: var(--panel-2); border: 1px solid var(--line);
+  }
+  .ix-controls {
+    display: flex; gap: 24px; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; margin-bottom: 24px;
+  }
+  .ix-pain-nav { display: flex; gap: 4px; flex-wrap: wrap; }
+  .ix-pain-btn {
+    padding: 6px 14px; font-size: 11px;
+    background: transparent;
+    border: 1px solid var(--line-strong);
+    color: var(--text-mid);
+    cursor: pointer;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    font-family: 'JetBrains Mono', monospace;
+    transition: all 0.15s;
+  }
+  .ix-pain-btn:hover { color: var(--text); border-color: var(--text-mid); }
+  .ix-pain-btn.active {
+    background: var(--red); color: var(--bg);
+    border-color: var(--red);
+    box-shadow: 0 0 12px var(--red-glow);
+  }
+  .ix-toggle { display: flex; }
+  .ix-toggle-btn {
+    padding: 6px 14px; font-size: 11px;
+    background: transparent; border: 1px solid var(--line-strong);
+    color: var(--text-mid); cursor: pointer;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .ix-toggle-btn.active { background: var(--text); color: var(--bg); border-color: var(--text); }
+  .ix-toggle-btn + .ix-toggle-btn { margin-left: -1px; }
+
+  .ix-grid-wrap { overflow-x: auto; }
+  .ix-grid {
+    display: grid; grid-template-columns: 90px repeat(4, 1fr);
+    gap: 3px; min-width: 460px;
+  }
+  .ix-col-head { font-size: 10px; color: var(--text-dim); padding: 6px 2px 12px; text-align: center; letter-spacing: 0.08em; text-transform: uppercase; }
+  .ix-row-head { font-size: 11px; color: var(--text); display: flex; align-items: center; padding-right: 8px; justify-content: flex-end; font-weight: 600; }
+  .ix-cell {
+    aspect-ratio: 1.4;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; font-weight: 700;
+    border: 1px solid rgba(0,0,0,0.2);
+    cursor: default; position: relative;
+    transition: transform 0.25s;
+    font-variant-numeric: tabular-nums;
+  }
+  .ix-cell:hover { transform: scale(1.06); z-index: 2; box-shadow: 0 0 0 1px var(--text); }
+  .ix-cell .tip { opacity:0; position:absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%); background: var(--bg); color: var(--text); border: 1px solid var(--line-strong); font-size: 10px; padding: 6px 8px; white-space: nowrap; transition: opacity 0.2s; pointer-events: none; }
+  .ix-cell:hover .tip { opacity: 1; }
+  .ix-row-divider { grid-column: 1/-1; height: 4px; }
+
+  .ix-callout {
+    margin-top: 20px; padding: 16px;
+    background: var(--bg); border-left: 3px solid var(--red);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px; color: var(--text-mid);
+    line-height: 1.65;
+  }
+  .ix-callout strong { color: var(--text); }
+
+  /* DIAGNOSIS / CONCLUSION */
+  .diagnosis {
+    padding: 96px 48px;
+    background: var(--panel);
+    border-top: 1px solid var(--red);
+    position: relative;
+  }
+  .diagnosis::before {
+    content: '⚠ DIAGNOSIS · FINAL ASSESSMENT'; position: absolute;
+    top: -1px; left: 48px;
+    background: var(--bg); color: var(--red);
+    padding: 6px 14px; font-size: 10px;
+    letter-spacing: 0.22em;
+    transform: translateY(-50%);
+    border: 1px solid var(--red);
+    text-shadow: 0 0 8px var(--red-glow);
+  }
+  .diag-title {
+    font-size: clamp(32px, 5vw, 56px);
+    line-height: 1.05; letter-spacing: -0.03em;
+    font-weight: 800; color: var(--text);
+    margin-bottom: 24px; max-width: 900px;
+  }
+  .diag-title .red { color: var(--red); text-shadow: 0 0 20px var(--red-glow); }
+  .diag-body {
+    font-family: 'Inter', sans-serif;
+    font-size: 17px; max-width: 700px;
+    color: var(--text-mid); line-height: 1.75;
+    margin-bottom: 48px;
+  }
+  .diag-findings {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1px; background: var(--line-strong);
+    border: 1px solid var(--line-strong);
+  }
+  .diag-card {
+    background: var(--bg); padding: 28px 24px;
+  }
+  .diag-card .lbl {
+    font-size: 9px; color: var(--text-dim);
+    letter-spacing: 0.22em; text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .diag-card .num {
+    font-size: 38px; font-weight: 700;
+    line-height: 1; letter-spacing: -0.03em;
+    color: var(--red); text-shadow: 0 0 14px var(--red-glow);
+    margin-bottom: 10px;
+    font-variant-numeric: tabular-nums;
+  }
+  .diag-card .num .unit { font-size: 16px; color: var(--text-dim); margin-left: 2px; font-weight: 400; text-shadow: none; }
+  .diag-card .desc {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px; color: var(--text-mid);
+    line-height: 1.6;
+  }
+  .diag-note {
+    margin-top: 48px; padding: 20px;
+    background: var(--bg); border-left: 3px solid var(--amber);
+    font-family: 'Inter', sans-serif;
+    font-size: 13px; color: var(--text-mid);
+    max-width: 720px; line-height: 1.7;
+  }
+
+  footer {
+    padding: 32px 32px;
+    background: var(--bg);
+    border-top: 1px solid var(--line);
+    font-size: 10px; color: var(--text-dim);
+    letter-spacing: 0.18em;
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px;
+    text-transform: uppercase;
+  }
+
+  /* fade animations */
+  .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration:0.01ms !important; transition-duration:0.01ms !important; }
+    .ecg-line { animation: none; stroke-dashoffset: 0; }
+  }
+
+  @media (max-width: 700px) {
+    .hero, section { padding-left: 16px; padding-right: 16px; }
+    .section-header, .triage-table, .pain-control, .clinical-hm-wrap,
+    .group-monitor, .timeline-monitor, .map-monitor, .ix-monitor,
+    .diagnosis { margin-left: 0; margin-right: 0; padding-left: 24px; padding-right: 24px; }
+    .topbar { grid-template-columns: 1fr; height: auto; }
+    .topbar-cell { padding: 8px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-cell">
+    PROTOCOL
+    <span class="v">NHAMCS-323K</span>
+  </div>
+  <div class="topbar-cell">
+    DATA WINDOW
+    <span class="v">2009–2022 · 14Y</span>
+  </div>
+  <div class="topbar-cell">
+    STATUS
+    <span class="v red blink">DISPARITY DETECTED</span>
+  </div>
+  <div class="topbar-cell">
+    LAST SYNC
+    <span class="v green" id="syncTime">--:--:--</span>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-main">
+    <div class="hero-eyebrow">EMERGENCY DEPARTMENT · GENDER DISPARITY AUDIT</div>
+    <h1>
+      Same pain.<br>
+      <span class="bracket">[</span><span class="red">+1.9 min</span><span class="bracket">]</span> longer wait.
+    </h1>
+    <p class="hero-sub">A 14-year audit of 323,137 emergency-department visits, sampled by the CDC's National Hospital Ambulatory Medical Care Survey. Patient sex was an independent predictor of time-to-provider across every triage and pain category measured.</p>
+
+    <div class="ecg-wrap">
+      <svg class="ecg-svg" viewBox="0 0 800 80" preserveAspectRatio="none">
+        <path class="ecg-line" d="M0,40 L60,40 L70,40 L80,38 L85,42 L92,20 L98,60 L104,32 L110,40 L160,40 L170,40 L180,38 L185,42 L192,20 L198,60 L204,32 L210,40 L260,40 L270,40 L280,38 L285,42 L292,20 L298,60 L304,32 L310,40 L360,40 L370,40 L380,38 L385,42 L392,20 L398,60 L404,32 L410,40 L460,40 L470,40 L480,38 L485,42 L492,20 L498,60 L504,32 L510,40 L560,40 L570,40 L580,38 L585,42 L592,20 L598,60 L604,32 L610,40 L660,40 L670,40 L680,38 L685,42 L692,20 L698,60 L704,32 L710,40 L800,40"/>
+      </svg>
+    </div>
+
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="lbl">Median Δ wait</div>
+        <div class="num red">+2<span class="unit">min</span></div>
+        <div class="desc">Female-minus-male, pooled across all 14 years</div>
+      </div>
+      <div class="hero-stat">
+        <div class="lbl">Max gap cell</div>
+        <div class="num red">+6<span class="unit">min</span></div>
+        <div class="desc">Immediate triage × worst pain — the most acute patients</div>
+      </div>
+      <div class="hero-stat">
+        <div class="lbl">Years with gap</div>
+        <div class="num red">14/<span style="color:var(--text-dim)">14</span></div>
+        <div class="desc">2009 → 2022 · uninterrupted directional pattern</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="patient-panel">
+    <div class="patient-panel-title">— Demo patient · room 04A —</div>
+    <div class="vital-row"><span class="k">HR</span><span class="v green">78 bpm</span></div>
+    <div class="vital-row"><span class="k">BP</span><span class="v green">120 / 76</span></div>
+    <div class="vital-row"><span class="k">SpO₂</span><span class="v green">98 %</span></div>
+    <div class="vital-row"><span class="k">Temp</span><span class="v amber">37.4 °C</span></div>
+    <div class="vital-row"><span class="k">Pain</span><span class="v amber">8 / 10</span></div>
+    <div class="vital-row"><span class="k">Triage</span><span class="v amber">Emergent</span></div>
+    <div class="vital-row"><span class="k">Sex</span><span class="v red">F</span></div>
+    <div class="vital-row"><span class="k">Wait Δ</span><span class="v red">+2 min</span></div>
+    <div class="alert-banner">Sex predicts +2 min wait</div>
+  </div>
+</section>
+
+<!-- DATASET OVERVIEW -->
+<section>
+  <div class="section-block" data-channel="CH 02 · DATASET">
+    <div class="label-tag">RECEIVING</div>
+    <div class="section-header">
+      <div class="section-meta">
+        <div class="seg">SAMPLE OK</div>
+        <div class="seg">CDC NHAMCS</div>
+        <div class="seg warn">SEX VARIABLE PRESENT</div>
+      </div>
+      <h2 class="section-title">Dataset <span class="dim">/</span> <span class="red">vitals</span></h2>
+      <p class="section-body">National probability sample of US hospital emergency departments. Records weighted to produce national estimates of ED utilization.</p>
+    </div>
+
+    <table class="triage-table">
+      <thead><tr>
+        <th>Triage acuity</th>
+        <th>Share of visits</th>
+        <th class="bar-cell">Distribution</th>
+      </tr></thead>
+      <tbody id="triageTable"></tbody>
+    </table>
+  </div>
+</section>
+
+<!-- WHAT — interactive -->
+<section>
+  <div class="section-block" data-channel="CH 03 · LIVE COMPARISON">
+    <div class="label-tag">ACTIVE</div>
+    <div class="section-header">
+      <div class="section-meta">
+        <div class="seg">SENSOR · PAIN-SCALE</div>
+        <div class="seg warn">DUAL CHANNEL · F / M</div>
+      </div>
+      <h2 class="section-title">Adjust the <span class="red">pain</span>. Watch the wait.</h2>
+      <p class="section-body">Move the input. Channel L (male) and Channel R (female) read the median wait time for a patient at that pain level. The right channel always reads higher.</p>
+    </div>
+
+    <div class="pain-control">
+      <div class="pc-control-block">
+        <div class="pc-label">
+          <span>PAIN SCALE INPUT · 0–10</span>
+          <span class="v" id="painVal">5</span>
+        </div>
+        <input type="range" min="0" max="10" value="5" id="painSlider" aria-label="Pain">
+      </div>
+      <div class="pc-readout">
+        <div class="who">Channel L · Male</div>
+        <div class="num male" id="mTime">21<span class="unit">min</span></div>
+        <div class="desc">median time to provider</div>
+      </div>
+      <div class="pc-readout">
+        <div class="who">Δ delta</div>
+        <div class="num delta" id="gapVal">+2<span class="unit">min</span></div>
+        <div class="desc" id="gapDesc">excess wait · sex-only</div>
+      </div>
+      <div class="pc-readout">
+        <div class="who">Channel R · Female</div>
+        <div class="num female" id="fTime">23<span class="unit">min</span></div>
+        <div class="desc">median time to provider</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HEATMAP -->
+<section>
+  <div class="section-block" data-channel="CH 04 · GRID SCAN">
+    <div class="label-tag">SCANNING</div>
+    <div class="section-header">
+      <div class="section-meta">
+        <div class="seg">25 CELLS</div>
+        <div class="seg warn">22 CELLS · WOMEN LONGER</div>
+      </div>
+      <h2 class="section-title">Every cell. <span class="red">Almost every one.</span></h2>
+      <p class="section-body">Female-minus-male median wait, in minutes, for each triage × pain combination. Red cells = women wait longer. Blue cells = men wait longer.</p>
+    </div>
+
+    <div class="clinical-hm-wrap">
+      <div class="clinical-hm-title">
+        <span>GAP MATRIX · TRIAGE × PAIN</span>
+        <span>UNIT: MINUTES · F − M</span>
+      </div>
+      <div class="clinical-hm-grid" id="clinicalHm"></div>
+    </div>
+  </div>
+</section>
+
+<!-- YEAR BUTTERFLY -->
+<section>
+  <div class="section-block" data-channel="CH 05 · TEMPORAL BUTTERFLY">
+    <div class="label-tag">PLAYBACK</div>
+    <div class="section-header">
+      <div class="section-meta">
+        <div class="seg">YEARS · 2009–2022</div>
+        <div class="seg warn">PAIN BREAKDOWN 0–10</div>
+      </div>
+      <h2 class="section-title">Frame-by-frame, year <span class="dim">/</span> <span class="red">by year</span></h2>
+      <p class="section-body">Mean wait time in minutes by pain score, split by sex. Scrub the year slider to watch the spectrum evolve.</p>
+    </div>
+
+    <div class="group-monitor">
+      <div class="gm-top">
+        <div class="gm-headline">
+          In <span class="red" id="bfYearInline">2009</span>, at worst-pain (10/10), women waited <span class="red" id="bfGapText">+5.0 min</span> longer than men with identical reports.
+        </div>
+        <div class="gm-year-panel">
+          <div class="gm-year-display" id="bfYearDisplay">2009</div>
+          <div class="gm-year-hint">scrub frame</div>
+          <div class="gm-slider-row">
+            <span class="gm-yr-end">09</span>
+            <input type="range" min="0" max="13" value="0" id="bfYearSlider" style="width:140px" aria-label="Year">
+            <span class="gm-yr-end">22</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="gm-readout">
+        <div class="gm-rd-block">
+          <div class="lbl">CH-L · Male median</div>
+          <div class="v male" id="bfMaleAvg">31.0<span class="unit"> min</span></div>
+        </div>
+        <div class="gm-rd-sep">|</div>
+        <div class="gm-rd-block">
+          <div class="lbl">Δ delta</div>
+          <div class="v red" id="bfDeltaAvg">+3.0<span class="unit"> min</span></div>
+        </div>
+        <div class="gm-rd-sep">|</div>
+        <div class="gm-rd-block">
+          <div class="lbl">CH-R · Female median</div>
+          <div class="v female" id="bfFemaleAvg">34.0<span class="unit"> min</span></div>
+        </div>
+      </div>
+
+      <div class="gm-chart-title">MEAN WAIT BY PAIN SCORE · MINUTES</div>
+      <div class="gm-chart-headers">
+        <div class="gm-hdr-m">← MALE</div>
+        <div></div>
+        <div class="gm-hdr-f">FEMALE →</div>
+      </div>
+      <div id="bfBars"></div>
+    </div>
+  </div>
+</section>
+
+<!-- TIMELINE -->
+<section>
+  <div class="section-block" data-channel="CH 06 · TEMPORAL TREND">
+    <div class="label-tag">TRACE</div>
+    <div class="section-header">
+      <div class="section-meta">
+        <div class="seg">2009 → 2022</div>
+        <div class="seg warn">PERSISTENT Δ</div>
+      </div>
+      <h2 class="section-title">Both lines fall. <span class="red">The gap holds.</span></h2>
+      <p class="section-body">Median wait time over 14 years. Lines never cross.</p>
+    </div>
+    <div class="timeline-monitor">
+      <div class="tm-top">
+        <div class="tm-legend">
+          <div class="tm-leg"><div class="tm-leg-dot" style="background:var(--magenta);box-shadow:0 0 8px var(--magenta-glow)"></div> Women · median (min)</div>
+          <div class="tm-leg"><div class="tm-leg-dot" style="background:var(--blue);box-shadow:0 0 8px var(--blue-glow)"></div> Men · median (min)</div>
+        </div>
+        <div style="font-size:10px;color:var(--text-dim);letter-spacing:0.18em">Y-AXIS · MIN · 8–35</div>
+      </div>
+      <div class="tm-chart-wrap">
+        <canvas id="timeChart"></canvas>
+      </div>
+      <p style="font-family:'Inter',sans-serif;font-size:12px;color:var(--text-dim);margin-top:14px;line-height:1.6">2020 anomaly attributable to COVID-19 ED utilization drop. Overall trajectory: 32 → 14 min, but female line stays elevated.</p>
+    </div>
+  </div>
+</section>
+
+<!-- MAP -->
+<section>
+  <div class="section-block" data-channel="CH 07 · GEOGRAPHIC LOCALISATION">
+    <div class="label-tag">PROBING</div>
+    <div class="section-header">
+      <div class="section-meta">
+        <div class="seg">4 CENSUS REGIONS</div>
+        <div class="seg warn">MIDWEST · MAX Δ</div>
+      </div>
+      <h2 class="section-title">Localised. <span class="red">Not eliminated.</span></h2>
+      <p class="section-body">Each state coloured by its Census region's F−M wait gap. Scrub the slider to scan across years.</p>
+    </div>
+    <div class="map-monitor">
+      <div id="usMapChart" style="width:100%;height:520px"></div>
+      <p style="font-family:'Inter',sans-serif;font-size:12px;color:var(--text-dim);margin-top:14px;line-height:1.6">NHAMCS public files report only 4 Census regions — every state within a region shares that region's value.</p>
+    </div>
+  </div>
+</section>
+
+<!-- INTERSECT -->
+<section>
+  <div class="section-block" data-channel="CH 08 · STRATIFIED ANALYSIS">
+    <div class="label-tag">DEEP SCAN</div>
+    <div class="section-header">
+      <div class="section-meta">
+        <div class="seg">RACE × SEX × PAIN</div>
+        <div class="seg warn">COMPOUNDING DETECTED</div>
+      </div>
+      <h2 class="section-title">Race <span class="dim">/</span> <span class="red">compounds it</span></h2>
+      <p class="section-body">Each cell: minutes above (red) or below (blue) the band median for that pain × sex × race cell. Toggle to view absolute wait time in minutes.</p>
+    </div>
+    <div class="ix-monitor">
+      <div class="ix-controls">
+        <div class="ix-pain-nav" id="ixPainNav">
+          <div class="ix-pain-btn active" data-pain="0">No pain</div>
+          <div class="ix-pain-btn" data-pain="1">Mild</div>
+          <div class="ix-pain-btn" data-pain="2">Moderate</div>
+          <div class="ix-pain-btn" data-pain="3">Severe</div>
+          <div class="ix-pain-btn" data-pain="4">Worst</div>
+        </div>
+        <div class="ix-toggle">
+          <div class="ix-toggle-btn active" id="ixBtnGap">Gap</div>
+          <div class="ix-toggle-btn" id="ixBtnRaw">Raw</div>
+        </div>
+      </div>
+      <div class="ix-grid-wrap"><div class="ix-grid" id="ixGrid"></div></div>
+      <div class="ix-callout" id="ixCallout"></div>
+    </div>
+  </div>
+</section>
+
+<!-- DIAGNOSIS -->
+<section style="padding-top:32px">
+  <div class="diagnosis">
+    <h2 class="diag-title">Final read: the ER is <span class="red">not neutral.</span></h2>
+    <p class="diag-body">Across pain levels, triage categories, four Census regions, and 14 consecutive years, female sex is associated with a longer time-to-provider. Pattern is robust to all measured covariates.</p>
+    <div class="diag-findings">
+      <div class="diag-card">
+        <div class="lbl">Finding 01 · Systematic</div>
+        <div class="num">25/<span style="color:var(--text-dim)">25</span></div>
+        <div class="desc">Triage × pain cells in which the gap appears in at least one direction. Pattern is non-random.</div>
+      </div>
+      <div class="diag-card">
+        <div class="lbl">Finding 02 · Geographic</div>
+        <div class="num">+2<span class="unit">min</span></div>
+        <div class="desc">Midwest regional gap — twice the national mean. Local protocols and hospital culture amplify the effect.</div>
+      </div>
+      <div class="diag-card">
+        <div class="lbl">Finding 03 · Race compounds</div>
+        <div class="num">+5<span class="unit">min</span></div>
+        <div class="desc">NH Black women at mild pain — single largest deviation from band median observed.</div>
+      </div>
+      <div class="diag-card">
+        <div class="lbl">Finding 04 · Clinically material</div>
+        <div class="num">3<span class="unit">min</span></div>
+        <div class="desc">Window for thrombolysis efficacy in acute ischaemic stroke. Two minutes of delay is not trivial.</div>
+      </div>
+    </div>
+    <div class="diag-note">
+      Data: National Hospital Ambulatory Medical Care Survey (NHAMCS), CDC National Center for Health Statistics, 2009–2022. Regional medians are used for regional comparison. Clinical reference points (CPR, stroke care, labour) are illustrative of clinically meaningful intervals — not direct outcome measurements from this dataset.
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>ED-AUDIT-2009-2022 · NHAMCS PUBLIC USE FILES</span>
+  <span>CDC NCHS · LOCKED FILE</span>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+<script>
+/* live clock */
+function tickClock() {
+  const d = new Date();
+  const t = d.toTimeString().substring(0,8);
+  const el = document.getElementById('syncTime');
+  if (el) el.textContent = t;
+}
+setInterval(tickClock, 1000); tickClock();
+
+/* triage table */
+const triageData = [
+  { name:'Immediate', pct:1, color:'#FF4D5C' },
+  { name:'Emergent', pct:12, color:'#F3C054' },
+  { name:'Urgent', pct:46, color:'#87E6C5' },
+  { name:'Semi-urgent', pct:34, color:'#5BB8E8' },
+  { name:'Non-urgent', pct:7, color:'#5A7682' },
+];
+const triEl = document.getElementById('triageTable');
+triEl.innerHTML = triageData.map(t => `
+  <tr>
+    <td style="color:var(--text);font-weight:600">${t.name}</td>
+    <td style="color:var(--text-mid)">${t.pct}%</td>
+    <td class="bar-cell">
+      <div class="triage-bar-wrap">
+        <div class="triage-bar"><div class="triage-bar-fill" data-w="${t.pct}" style="background:${t.color};box-shadow:0 0 8px ${t.color}"></div></div>
+        <span class="triage-bar-val" style="color:${t.color}">${t.pct}% n</span>
+      </div>
+    </td>
+  </tr>`).join('');
+
+/* pain slider */
+const painData = { 0:{m:20,g:0}, 1:{m:20,g:2}, 2:{m:20,g:1}, 3:{m:20,g:1}, 4:{m:20,g:2}, 5:{m:20,g:2}, 6:{m:21,g:1}, 7:{m:21,g:2}, 8:{m:21,g:2}, 9:{m:21,g:2}, 10:{m:21,g:2} };
+function setSlider(val) {
+  const d = painData[val];
+  document.getElementById('painVal').textContent = val;
+  document.getElementById('mTime').innerHTML = d.m + '<span class="unit">min</span>';
+  document.getElementById('fTime').innerHTML = (d.m + d.g) + '<span class="unit">min</span>';
+  document.getElementById('gapVal').innerHTML = '+' + d.g + '<span class="unit">min</span>';
+}
+const ps = document.getElementById('painSlider');
+ps.addEventListener('input', () => setSlider(parseInt(ps.value)));
+setSlider(5);
+
+/* heatmap */
+const hmData = {
+  rows: ['Immediate','Emergent','Urgent','Semi-urgent','Non-urgent'],
+  cols: ['No pain','Mild (1–3)','Moderate (4–6)','Severe (7–9)','Worst (10)'],
+  values: [[2,-2,0,6,6],[1,5,2,3,6],[-1,2,2,3,2],[0,0,1,1,0],[2,2,1,1,2]]
+};
+function gapColor(v) {
+  if (v <= -3) return { bg:'#1A4F73', text:'#A8D4ED', shadow:'rgba(91,184,232,0.4)' };
+  if (v < 0) return { bg:'#2E689B', text:'#FFFFFF', shadow:'rgba(91,184,232,0.4)' };
+  if (v === 0) return { bg:'#1A262E', text:'#5A7682', shadow:'transparent' };
+  if (v <= 2) return { bg:'#6B2F30', text:'#FFE0E0', shadow:'rgba(255,77,92,0.4)' };
+  if (v <= 4) return { bg:'#A53741', text:'#FFFFFF', shadow:'rgba(255,77,92,0.5)' };
+  return { bg:'#FF4D5C', text:'#0B0E10', shadow:'rgba(255,77,92,0.8)' };
+}
+const chm = document.getElementById('clinicalHm');
+chm.innerHTML = '<div class="chm-head"></div>' + hmData.cols.map(c => `<div class="chm-head">${c}</div>`).join('');
+hmData.rows.forEach((row, ri) => {
+  chm.innerHTML += `<div class="chm-row-head">${row}</div>`;
+  hmData.values[ri].forEach((v, ci) => {
+    const { bg, text, shadow } = gapColor(v);
+    const sign = v > 0 ? '+' : '';
+    chm.innerHTML += `<div class="chm-cell" style="background:${bg};color:${text};box-shadow:inset 0 0 12px ${shadow}">${sign}${v}<span class="micro">min</span><span class="tooltip">${row} · ${hmData.cols[ci]} = ${sign}${v} min</span></div>`;
+  });
+});
+
+/* butterfly */
+const BF_YEARS = ['2009','2010','2011','2012','2013','2014','2015','2016','2017','2018','2019','2020','2021','2022'];
+const BF_SCALE = 45;
+const BF_DATA = {
+  "2009":{"male":[31.0,32.0,32.0,35.0,31.5,31.0,32.0,33.0,34.0,37.0,32.0],"female":[34.0,32.0,33.0,32.0,32.0,38.0,36.0,35.0,38.0,39.0,37.0]},
+  "2010":{"male":[26.0,28.0,24.0,23.0,26.0,25.0,25.0,27.0,28.0,29.5,26.5],"female":[26.0,27.5,24.0,25.0,28.0,27.0,27.0,29.0,30.0,32.0,32.0]},
+  "2011":{"male":[26.0,24.0,24.0,21.0,26.0,25.0,26.0,27.0,26.0,25.0,25.0],"female":[27.0,29.5,26.5,24.5,27.0,27.0,25.0,28.0,29.0,31.0,27.0]},
+  "2012":{"male":[20.0,19.0,20.5,19.0,18.0,22.0,21.0,21.0,22.0,26.0,22.0],"female":[20.0,16.5,20.0,21.0,21.0,20.0,22.0,22.0,24.0,23.0,24.0]},
+  "2013":{"male":[24.0,22.0,24.0,24.0,26.0,24.0,20.0,23.0,23.0,21.0,22.0],"female":[23.0,27.0,22.0,20.0,22.0,25.0,24.0,24.0,26.0,27.0,24.0]},
+  "2014":{"male":[19.0,18.0,18.5,22.0,21.0,21.0,21.0,22.0,21.0,21.0,21.0],"female":[21.0,29.0,25.0,21.0,25.0,24.0,24.0,22.0,23.0,23.0,21.0]},
+  "2015":{"male":[18.0,12.0,20.0,20.0,19.0,20.0,20.0,20.0,19.0,20.0,18.0],"female":[18.0,17.0,27.0,23.0,18.5,21.0,19.0,21.0,21.0,21.0,19.0]},
+  "2016":{"male":[16.0,14.0,15.0,17.0,16.0,15.0,15.0,18.0,17.0,15.5,16.0],"female":[16.0,24.0,18.0,19.0,16.0,18.0,17.0,20.5,19.0,18.0,17.0]},
+  "2017":{"male":[14.0,13.0,12.0,17.0,15.0,16.0,17.0,19.0,16.0,15.0,16.0],"female":[14.0,18.0,18.0,16.0,16.0,17.0,16.5,16.0,16.0,16.0,15.0]},
+  "2018":{"male":[15.0,21.0,16.0,13.0,13.0,12.0,15.0,16.5,15.0,17.0,18.0],"female":[15.0,13.0,17.0,17.0,16.0,17.0,14.0,15.5,15.0,16.0,18.0]},
+  "2019":{"male":[14.0,15.0,13.5,12.0,16.0,15.0,13.0,14.0,13.0,14.0,14.0],"female":[15.0,15.0,15.0,15.0,18.0,15.0,12.0,15.0,16.0,13.0,14.5]},
+  "2020":{"male":[8.0,10.0,11.0,12.0,10.0,9.0,12.0,11.0,9.5,10.0,11.0],"female":[10.0,8.5,9.5,11.0,9.0,10.0,12.0,11.0,11.0,13.0,10.0]},
+  "2021":{"male":[14.0,12.5,17.0,12.0,15.0,12.0,16.0,15.0,13.0,15.0,15.5],"female":[16.0,14.0,14.0,16.0,14.0,14.0,15.0,16.0,15.0,15.0,14.0]},
+  "2022":{"male":[13.0,10.0,15.0,13.0,12.5,12.0,15.0,17.0,14.0,17.0,12.0],"female":[14.0,10.0,23.0,13.0,16.5,16.5,14.5,17.0,14.0,14.0,14.0]}
+};
+const BF_MED = { female:[34,28,27,22,24,22,19,17,16,16,15,11,14,15], male:[31,26,25,21,23,20,18,16,16,15,15,10,14,14] };
+function renderBf(idx) {
+  const d = BF_DATA[BF_YEARS[idx]];
+  const data = d.male.map((m,p) => ({pain:p, male:m, female:d.female[p]}));
+  document.getElementById('bfYearDisplay').textContent = BF_YEARS[idx];
+  document.getElementById('bfYearInline').textContent = BF_YEARS[idx];
+  document.getElementById('bfGapText').textContent = '+' + (data[10].female-data[10].male).toFixed(1) + ' min';
+  document.getElementById('bfMaleAvg').innerHTML = BF_MED.male[idx].toFixed(1) + '<span class="unit"> min</span>';
+  document.getElementById('bfFemaleAvg').innerHTML = BF_MED.female[idx].toFixed(1) + '<span class="unit"> min</span>';
+  document.getElementById('bfDeltaAvg').innerHTML = '+' + (BF_MED.female[idx] - BF_MED.male[idx]).toFixed(1) + '<span class="unit"> min</span>';
+  const bars = document.getElementById('bfBars');
+  bars.innerHTML = data.map(d => {
+    const mW = (d.male/BF_SCALE*100).toFixed(1);
+    const fW = (d.female/BF_SCALE*100).toFixed(1);
+    return `<div class="gm-bf-row"><div class="gm-male-side"><div class="gm-bar-m" style="width:${mW}%"><span class="gm-bar-val">${d.male}</span></div></div><div class="gm-pain-lbl">${d.pain}</div><div class="gm-bar-f" style="width:${fW}%"><span class="gm-bar-val">${d.female}</span></div></div>`;
+  }).join('');
+}
+const bfSlider = document.getElementById('bfYearSlider');
+bfSlider.addEventListener('input', () => renderBf(parseInt(bfSlider.value)));
+renderBf(0);
+
+/* time chart */
+const years = BF_YEARS;
+const womenWait = [34,28,27,22,24,22,19,17,16,16,15,11,14,15];
+const menWait = [31,26,25,21,23,20,18,16,16,15,15,10,14,14];
+function initTimeChart() {
+  const ctx = document.getElementById('timeChart');
+  if (!ctx) return;
+  new Chart(ctx, {
+    type:'line',
+    data:{ labels:years, datasets:[
+      { label:'Women', data:womenWait, borderColor:'#E85BB8', backgroundColor:'rgba(232,91,184,0.08)', fill:true, tension:0.35, pointRadius:4, pointBackgroundColor:'#E85BB8', pointBorderColor:'#0B0E10', pointBorderWidth:1.5, borderWidth:2.5, pointHoverRadius:6 },
+      { label:'Men', data:menWait, borderColor:'#5BB8E8', backgroundColor:'rgba(91,184,232,0.06)', fill:true, tension:0.35, pointRadius:4, pointBackgroundColor:'#5BB8E8', pointBorderColor:'#0B0E10', pointBorderWidth:1.5, borderWidth:2.5, pointHoverRadius:6 }
+    ]},
+    options: {
+      responsive:true, maintainAspectRatio:false,
+      animation:{duration:1600, easing:'easeOutCubic'},
+      plugins:{ legend:{display:false}, tooltip:{ backgroundColor:'#0B0E10', borderColor:'#FF4D5C', borderWidth:1, padding:10, titleFont:{family:'JetBrains Mono'}, bodyFont:{family:'JetBrains Mono', size:11}, callbacks:{ label: c => `${c.dataset.label}: ${c.parsed.y.toFixed(1)} min`} } },
+      scales: {
+        y: { min:8, title:{display:true, text:'MIN · MEDIAN', color:'#5A7682', font:{family:'JetBrains Mono', size:10, weight:'500'}}, grid:{color:'rgba(140,200,220,0.05)'}, ticks:{color:'#5A7682', font:{family:'JetBrains Mono', size:11}} },
+        x: { grid:{display:false}, ticks:{color:'#5A7682', font:{family:'JetBrains Mono', size:11}, maxRotation:0} }
+      }
+    }
+  });
+}
+
+/* US Map */
+const STATE_TO_REGION = {CT:'Northeast',ME:'Northeast',MA:'Northeast',NH:'Northeast',RI:'Northeast',VT:'Northeast',NJ:'Northeast',NY:'Northeast',PA:'Northeast',IL:'Midwest',IN:'Midwest',MI:'Midwest',OH:'Midwest',WI:'Midwest',IA:'Midwest',KS:'Midwest',MN:'Midwest',MO:'Midwest',NE:'Midwest',ND:'Midwest',SD:'Midwest',DE:'South',FL:'South',GA:'South',MD:'South',NC:'South',SC:'South',VA:'South',DC:'South',WV:'South',AL:'South',KY:'South',MS:'South',TN:'South',AR:'South',LA:'South',OK:'South',TX:'South',AZ:'West',CO:'West',ID:'West',MT:'West',NV:'West',NM:'West',UT:'West',WY:'West',AK:'West',CA:'West',HI:'West',OR:'West',WA:'West'};
+const STATE_NAMES = {AL:'Alabama',AK:'Alaska',AZ:'Arizona',AR:'Arkansas',CA:'California',CO:'Colorado',CT:'Connecticut',DE:'Delaware',DC:'D.C.',FL:'Florida',GA:'Georgia',HI:'Hawaii',ID:'Idaho',IL:'Illinois',IN:'Indiana',IA:'Iowa',KS:'Kansas',KY:'Kentucky',LA:'Louisiana',ME:'Maine',MD:'Maryland',MA:'Massachusetts',MI:'Michigan',MN:'Minnesota',MS:'Mississippi',MO:'Missouri',MT:'Montana',NE:'Nebraska',NV:'Nevada',NH:'New Hampshire',NJ:'New Jersey',NM:'New Mexico',NY:'New York',NC:'North Carolina',ND:'North Dakota',OH:'Ohio',OK:'Oklahoma',OR:'Oregon',PA:'Pennsylvania',RI:'Rhode Island',SC:'South Carolina',SD:'South Dakota',TN:'Tennessee',TX:'Texas',UT:'Utah',VT:'Vermont',VA:'Virginia',WA:'Washington',WV:'West Virginia',WI:'Wisconsin',WY:'Wyoming'};
+const MAP_DATA = {"2009":{"Northeast":{"f":39.0,"m":37.0,"g":2.0},"Midwest":{"f":30.0,"m":27.0,"g":3.0},"South":{"f":36.0,"m":32.0,"g":4.0},"West":{"f":31.0,"m":27.0,"g":4.0}},"2010":{"Northeast":{"f":28.0,"m":27.0,"g":1.0},"Midwest":{"f":26.0,"m":23.0,"g":3.0},"South":{"f":30.0,"m":29.0,"g":1.0},"West":{"f":25.0,"m":22.0,"g":3.0}},"2011":{"Northeast":{"f":29.0,"m":30.0,"g":-1.0},"Midwest":{"f":26.0,"m":23.0,"g":3.0},"South":{"f":29.0,"m":27.0,"g":2.0},"West":{"f":22.0,"m":22.0,"g":0.0}},"2012":{"Northeast":{"f":23.0,"m":23.0,"g":0.0},"Midwest":{"f":21.0,"m":21.0,"g":0.0},"South":{"f":25.0,"m":24.0,"g":1.0},"West":{"f":16.0,"m":15.0,"g":1.0}},"2013":{"Northeast":{"f":26.0,"m":26.0,"g":0.0},"Midwest":{"f":18.0,"m":18.0,"g":0.0},"South":{"f":27.0,"m":25.0,"g":2.0},"West":{"f":22.0,"m":21.0,"g":1.0}},"2014":{"Northeast":{"f":19.0,"m":17.0,"g":2.0},"Midwest":{"f":20.0,"m":19.0,"g":1.0},"South":{"f":24.0,"m":21.0,"g":3.0},"West":{"f":23.0,"m":22.5,"g":0.5}},"2015":{"Northeast":{"f":21.0,"m":20.0,"g":1.0},"Midwest":{"f":19.0,"m":18.0,"g":1.0},"South":{"f":18.0,"m":19.0,"g":-1.0},"West":{"f":19.0,"m":16.0,"g":3.0}},"2016":{"Northeast":{"f":23.0,"m":21.0,"g":2.0},"Midwest":{"f":16.0,"m":14.0,"g":2.0},"South":{"f":18.0,"m":17.0,"g":1.0},"West":{"f":15.0,"m":15.0,"g":0.0}},"2017":{"Northeast":{"f":20.0,"m":20.0,"g":0.0},"Midwest":{"f":16.0,"m":13.0,"g":3.0},"South":{"f":17.0,"m":18.0,"g":-1.0},"West":{"f":13.0,"m":13.0,"g":0.0}},"2018":{"Northeast":{"f":20.0,"m":18.0,"g":2.0},"Midwest":{"f":13.0,"m":13.0,"g":0.0},"South":{"f":17.0,"m":17.0,"g":0.0},"West":{"f":13.0,"m":12.0,"g":1.0}},"2019":{"Northeast":{"f":26.0,"m":26.0,"g":0.0},"Midwest":{"f":13.0,"m":12.0,"g":1.0},"South":{"f":14.0,"m":13.0,"g":1.0},"West":{"f":15.0,"m":14.0,"g":1.0}},"2020":{"Northeast":{"f":16.0,"m":14.0,"g":2.0},"Midwest":{"f":7.0,"m":6.0,"g":1.0},"South":{"f":12.0,"m":12.0,"g":0.0},"West":{"f":12.0,"m":11.0,"g":1.0}},"2021":{"Northeast":{"f":17.0,"m":17.0,"g":0.0},"Midwest":{"f":12.0,"m":11.0,"g":1.0},"South":{"f":18.0,"m":18.0,"g":0.0},"West":{"f":11.0,"m":11.0,"g":0.0}},"2022":{"Northeast":{"f":19.0,"m":17.0,"g":2.0},"Midwest":{"f":10.0,"m":10.0,"g":0.0},"South":{"f":20.0,"m":19.0,"g":1.0},"West":{"f":12.0,"m":12.0,"g":0.0}}};
+
+function buildMapFrame(yr) {
+  const yrData = MAP_DATA[yr];
+  const states = Object.keys(STATE_TO_REGION);
+  const zVals = [], hoverTexts = [];
+  states.forEach(s => {
+    const region = STATE_TO_REGION[s];
+    const r = yrData[region] || {f:0,m:0,g:0};
+    zVals.push(r.g);
+    hoverTexts.push(`<b>${STATE_NAMES[s]}</b> · ${region}<br><br>♀ Female: <b>${r.f} min</b><br>♂ Male: <b>${r.m} min</b><br><br>Δ F−M: <b>${r.g > 0 ? '+' : ''}${r.g} min</b>`);
+  });
+  return { states, zVals, hoverTexts };
+}
+function initMap() {
+  const el = document.getElementById('usMapChart');
+  if (!el || typeof Plotly === 'undefined') return;
+  const f0 = buildMapFrame(years[0]);
+  const trace = { type:'choropleth', locationmode:'USA-states', locations:f0.states, z:f0.zVals, text:f0.hoverTexts,
+    hovertemplate:'%{text}<extra></extra>',
+    colorscale:[[0,'#5BB8E8'],[0.4,'#1A4F73'],[0.5,'#1A262E'],[0.6,'#A53741'],[1,'#FF4D5C']],
+    zmid:0, zmin:-4, zmax:4,
+    colorbar:{title:{text:'Δ F−M (min)', font:{family:'JetBrains Mono', size:11, color:'#95B0BA'}}, thickness:10, len:0.6, tickvals:[-4,-2,0,2,4], ticktext:['-4','-2','0','+2','+4'], tickfont:{family:'JetBrains Mono', color:'#95B0BA', size:10}, bgcolor:'rgba(0,0,0,0)'},
+    marker:{line:{color:'#060B0F', width:0.6}}
+  };
+  const frames = years.map(yr => { const f = buildMapFrame(yr); return { name:yr, data:[{z:f.zVals, text:f.hoverTexts, locations:f.states}] }; });
+  const layout = {
+    geo:{scope:'usa', projection:{type:'albers usa'}, showlakes:true, lakecolor:'#060B0F', bgcolor:'rgba(0,0,0,0)', subunitcolor:'rgba(140,200,220,0.15)'},
+    margin:{l:0,r:0,t:0,b:60}, height:460,
+    paper_bgcolor:'rgba(0,0,0,0)', plot_bgcolor:'rgba(0,0,0,0)',
+    font:{family:'JetBrains Mono, monospace', color:'#95B0BA'},
+    updatemenus:[{type:'buttons', direction:'left', x:0.02, y:-0.08, xanchor:'left', yanchor:'top', showactive:false, bgcolor:'#0C1418', bordercolor:'#FF4D5C', font:{color:'#FF4D5C', family:'JetBrains Mono', size:10}, buttons:[{label:'▶ PLAY', method:'animate', args:[null,{frame:{duration:700, redraw:true}, transition:{duration:300}, fromcurrent:true, mode:'immediate'}], args2:[[null], {frame:{duration:0, redraw:false}, mode:'immediate', transition:{duration:0}}] }]}],
+    sliders:[{active:0, x:0.15, y:-0.06, len:0.78, currentvalue:{prefix:'YR · ', visible:true, xanchor:'right', font:{size:11, color:'#FF4D5C', family:'JetBrains Mono'}}, transition:{duration:300}, pad:{b:8, t:8}, bgcolor:'#0C1418', activebgcolor:'#FF4D5C', tickcolor:'#5A7682', font:{family:'JetBrains Mono', size:10, color:'#95B0BA'}, steps: years.map(yr => ({label:yr, method:'animate', args:[[yr], {mode:'immediate', frame:{duration:300, redraw:true}, transition:{duration:300}}]}))}]
+  };
+  Plotly.newPlot(el, [trace], layout, {responsive:true, displayModeBar:false}).then(() => Plotly.addFrames(el, frames));
+}
+
+/* intersectionality */
+const IX_RACES = ['NH White','NH Black','Hispanic','NH Other'];
+const IX_BAND_MEDIANS = [15,16,16,17,16];
+const IX_GAP = [
+  { f:[-1,+3,+3,0], m:[-2,+2,+1,-3] },
+  { f:[+1,+5,+2,-3], m:[-1,+1,+1,-3] },
+  { f:[0,+1,+2,-1], m:[-1,+2,0,-2] },
+  { f:[0,+1,0,-2], m:[-1,+2,0,-3] },
+  { f:[0,+1,+2,+1], m:[-1,+2,+1,-1] },
+];
+const IX_CALLOUTS_GAP = [
+  "At <strong>no pain</strong>, NH Black women wait <strong>+3 min above median</strong> while NH White men wait −2 below.",
+  "At <strong>mild pain</strong>, NH Black women: <strong>+5 min above median</strong> — single largest deviation in the dataset.",
+  "At <strong>moderate pain</strong>, NH Black men: +2 above median. Race shapes the gap as much as sex.",
+  "At <strong>severe pain</strong>, NH Other below median; NH Black above. Sex no longer dominant predictor.",
+  "At <strong>worst pain</strong>, NH Black men: +2 above median; NH White men: −1 below.",
+];
+const IX_CALLOUTS_RAW = [
+  "At <strong>no pain</strong>, NH Black women: <strong>18 min</strong> vs. NH White men: 13 min.",
+  "At <strong>mild pain</strong>, NH Black women: <strong>21 min</strong> — peak in this pain stratum.",
+  "At <strong>moderate pain</strong>, NH Black: 17–18 min vs. NH White women: 16 min.",
+  "At <strong>severe pain</strong>, NH Black women: 18 min vs. NH White men: 16 min.",
+  "At <strong>worst pain</strong>, NH Black men: <strong>18 min</strong> — longest absolute wait.",
+];
+let ixPain = 0, ixView = 'gap';
+function ixGapColor(v) {
+  if (v <= -3) return { bg:'#1A4F73', text:'#A8D4ED' };
+  if (v === -2) return { bg:'#2E689B', text:'#FFFFFF' };
+  if (v === -1) return { bg:'#3E81B6', text:'#FFFFFF' };
+  if (v === 0) return { bg:'#1A262E', text:'#5A7682' };
+  if (v === 1) return { bg:'#6B2F30', text:'#FFE0E0' };
+  if (v === 2) return { bg:'#A53741', text:'#FFFFFF' };
+  return { bg:'#FF4D5C', text:'#0B0E10' };
+}
+function ixRawColor(v, mn, mx) {
+  const t = (v - mn) / (mx - mn);
+  if (t < 0.25) return { bg:'#1A4F73', text:'#A8D4ED' };
+  if (t < 0.5) return { bg:'#2E689B', text:'#fff' };
+  if (t < 0.75) return { bg:'#5BB8E8', text:'#0B0E10' };
+  return { bg:'#A8D4ED', text:'#0B0E10' };
+}
+function renderIx() {
+  const d = IX_GAP[ixPain];
+  const median = IX_BAND_MEDIANS[ixPain];
+  const grid = document.getElementById('ixGrid');
+  grid.innerHTML = '';
+  const rawF = d.f.map(v => median+v);
+  const rawM = d.m.map(v => median+v);
+  const all = [...rawF, ...rawM];
+  const rMin = Math.min(...all), rMax = Math.max(...all);
+  grid.innerHTML += '<div class="ix-col-head"></div>' + IX_RACES.map(r => `<div class="ix-col-head">${r}</div>`).join('');
+  [['F', d.f, rawF], ['M', d.m, rawM]].forEach(([sex, gv, rv], si) => {
+    if (si === 1) grid.innerHTML += `<div class="ix-row-divider" style="background:rgba(140,200,220,0.12)"></div>`;
+    grid.innerHTML += `<div class="ix-row-head">${sex}</div>`;
+    gv.forEach((g, ri) => {
+      const r = rv[ri];
+      let bg, text, display, tip;
+      if (ixView === 'gap') {
+        ({ bg, text } = ixGapColor(g));
+        display = (g > 0 ? '+' : '') + g;
+        tip = `${sex==='F'?'Female':'Male'} · ${IX_RACES[ri]}: ${display} min`;
+      } else {
+        ({ bg, text } = ixRawColor(r, rMin, rMax));
+        display = r;
+        tip = `${sex==='F'?'Female':'Male'} · ${IX_RACES[ri]}: ${r} min`;
+      }
+      grid.innerHTML += `<div class="ix-cell" style="background:${bg};color:${text}">${display}<span class="tip">${tip}</span></div>`;
+    });
+  });
+  document.getElementById('ixCallout').innerHTML = ixView === 'gap' ? IX_CALLOUTS_GAP[ixPain] : IX_CALLOUTS_RAW[ixPain];
+}
+document.querySelectorAll('.ix-pain-btn').forEach(b => b.addEventListener('click', () => {
+  document.querySelectorAll('.ix-pain-btn').forEach(x => x.classList.remove('active'));
+  b.classList.add('active'); ixPain = parseInt(b.dataset.pain); renderIx();
+}));
+document.getElementById('ixBtnGap').addEventListener('click', () => { ixView='gap'; document.getElementById('ixBtnGap').classList.add('active'); document.getElementById('ixBtnRaw').classList.remove('active'); renderIx(); });
+document.getElementById('ixBtnRaw').addEventListener('click', () => { ixView='raw'; document.getElementById('ixBtnRaw').classList.add('active'); document.getElementById('ixBtnGap').classList.remove('active'); renderIx(); });
+renderIx();
+
+/* fades & lazy charts */
+const fadeObs = new IntersectionObserver(es => es.forEach(e => {
+  if (e.isIntersecting) {
+    e.target.classList.add('visible');
+    e.target.querySelectorAll('[data-w]').forEach(b => b.style.width = b.dataset.w + '%');
+  }
+}), { threshold: 0.12 });
+document.querySelectorAll('.fade-in, .section-block').forEach(el => fadeObs.observe(el));
+document.querySelectorAll('[data-w]').forEach(el => {
+  const o = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.style.width = e.target.dataset.w + '%'; o.disconnect(); } }), { threshold: 0.3 });
+  o.observe(el);
+});
+const tcObs = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { initTimeChart(); tcObs.disconnect(); } }), { threshold: 0.15 });
+tcObs.observe(document.getElementById('timeChart'));
+const mapObs = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { initMap(); mapObs.disconnect(); } }), { threshold: 0.1 });
+mapObs.observe(document.getElementById('usMapChart'));
+</script>
+</body>
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Wait Gap · Five Design Explorations</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,700;1,9..144,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: #FCFAF6;
+    color: #14110E;
+    padding: 80px 8vw;
+    line-height: 1.65;
+  }
+  h1 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(48px, 6vw, 88px);
+    line-height: 1.0;
+    letter-spacing: -0.03em;
+    margin-bottom: 16px;
+    font-weight: 500;
+  }
+  h1 em { font-style: italic; color: #C94040; }
+  .sub {
+    font-size: 18px;
+    color: #4A453E;
+    max-width: 620px;
+    margin-bottom: 72px;
+    font-weight: 300;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 32px;
+  }
+  .card {
+    background: #fff;
+    border: 0.5px solid rgba(20,17,14,0.10);
+    border-radius: 20px;
+    padding: 36px;
+    transition: all 0.4s cubic-bezier(0.16,1,0.3,1);
+    text-decoration: none; color: inherit;
+    display: flex; flex-direction: column;
+    box-shadow: 0 2px 12px rgba(20,17,14,0.03);
+  }
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(20,17,14,0.08);
+    border-color: #C94040;
+  }
+  .card .num {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 56px;
+    line-height: 1; color: #C94040;
+    margin-bottom: 24px;
+    font-weight: 400;
+  }
+  .card h2 {
+    font-family: 'Fraunces', serif;
+    font-size: 28px; font-weight: 500;
+    line-height: 1.15; letter-spacing: -0.015em;
+    margin-bottom: 12px;
+  }
+  .card .tag {
+    font-size: 11px; letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #908A82; margin-bottom: 20px;
+  }
+  .card p {
+    font-size: 14px; color: #4A453E;
+    line-height: 1.6; margin-bottom: 24px;
+    flex: 1;
+  }
+  .card .cta {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 13px; font-weight: 500;
+    color: #C94040;
+    letter-spacing: 0.02em;
+  }
+  .card .cta::after {
+    content: '→'; transition: transform 0.3s;
+  }
+  .card:hover .cta::after { transform: translateX(6px); }
+  .meta {
+    margin-top: 80px; padding-top: 32px;
+    border-top: 0.5px solid rgba(20,17,14,0.10);
+    font-size: 13px; color: #908A82;
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px;
+  }
+</style>
+</head>
+<body>
+
+<h1>The Wait Gap.<br><em>Five explorations.</em></h1>
+<p class="sub">Five different visual treatments of the same NHAMCS analysis (2009–2022, 323,137 visits). Each one tells the gender wait-time story with a different voice and aesthetic.</p>
+
+<div class="grid">
+  <a class="card" href="design_01_refined_editorial.html">
+    <div class="num">1.</div>
+    <div class="tag">Refined editorial · improved</div>
+    <h2>Same DNA, smoother breath.</h2>
+    <p>The current story, refined. Better typography (Fraunces + Inter), smoother spring-eased animations, a reading-progress bar, active-nav highlighting, hover micro-interactions, scoped chart lazy-load. Same color story, more polish.</p>
+    <span class="cta">Open</span>
+  </a>
+
+  <a class="card" href="design_02_mystery_reveal.html">
+    <div class="num">2.</div>
+    <div class="tag">Mystery · withheld until the end</div>
+    <h2>No numbers until you've seen it.</h2>
+    <p>A visual investigation in 5 chapters. Numbers are blurred, hidden behind dots and shapes through the whole story — colors, silhouettes, and an animated mystery heatmap. All values reveal at once in a black "The Numbers" finale.</p>
+    <span class="cta">Open</span>
+  </a>
+
+  <a class="card" href="design_03_clinical_monitor.html">
+    <div class="num">3.</div>
+    <div class="tag">Clinical · ER monitor</div>
+    <h2>It looks like a vitals panel.</h2>
+    <p>JetBrains Mono, dark medical UI, ECG line that draws, pulsing red alert dot, channel-style live charts. Sections are framed as "channels" with status indicators. A live clock ticks. The conclusion is a "diagnosis card."</p>
+    <span class="cta">Open</span>
+  </a>
+
+  <a class="card" href="design_04_brutalist_print.html">
+    <div class="num">4.</div>
+    <div class="tag">Brutalist · field report</div>
+    <h2>A newspaper, slammed into evidence.</h2>
+    <p>Newspaper masthead, Bodoni × Space Mono, ruling lines, drop caps, 3-column lede, oversized stamps, a red "ruling" page near the end. Numbers are exhibits A through F. Built to feel like an investigative print issue.</p>
+    <span class="cta">Open</span>
+  </a>
+
+  <a class="card" href="design_05_cinematic_dark.html">
+    <div class="num">5.</div>
+    <div class="tag">Cinematic · documentary</div>
+    <h2>Five acts. Letterboxed.</h2>
+    <p>A dark documentary aesthetic. Letterbox bars slide in on scroll. Act tracker pins to top. Gold & crimson accents glow softly. Slow, deliberate reveals, breathing radial light, Fraunces serif overlay. End title card delivers the finding.</p>
+    <span class="cta">Open</span>
+  </a>
+</div>
+
+<div class="meta">
+  <span>NHAMCS 2009–2022 · CDC NCHS · 323,137 visits</span>
+  <span>Five UI explorations · Same data</span>
+</div>
+
+</body>
+</html>
